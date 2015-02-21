@@ -2,7 +2,6 @@
 
 import java.util.HashMap;
 import java.util.Map;
-import org.json.JSONObject;
 
 
 public class BattleSnakeHandlers {
@@ -32,22 +31,32 @@ public class BattleSnakeHandlers {
         return responseObject;
     }
 
-    private void parseStart(JSONObject obj)
+    private void parseStart(Map<String, Object> requestBody)
     {
-        Board.game_id = obj.getJSONObject("game_id");
-        Board.width = obj.getJSONObject("width");
-        Board.height = obj.getJSONObject("width");
+        
+        Board.game_id = requestBody.get("game_id").toString();
+        Board.width = (Integer)requestBody.get("width");
+        Board.height = (Integer)requestBody.get("width");
     }
     
-    private void parseBoard(JSONObject obj)
+    private void parseBoard(Map<String, Object> requestBody)
     {
-        Board.game_id = obj.getJSONObject("game_id");
-        Board.turn = obj.getJSONObject("turn");
-        Board.board = parseBoardTiles(obj.getJSONObject("board"));
-        Board.snakes = parseSnakes(obj.getJSONObject("snakes"));
-        Board.food = obj.getJSONObject("food");
+        Board.game_id = requestBody.get("game_id").toString();
+        Board.turn = (Integer)requestBody.get("turn");
+        Board.board = parseBoardTiles(requestBody.get("board"));
+        Board.snakes = parseSnakes(requestBody.get("snakes"));
+        Board.food = null;//(int[][])((Integer[][]) requestBody.get("food"));
     }
     
+    private BoardTile[][] parseBoardTiles(Object tiles)
+    {
+        return null;
+    }
+    
+    private Snake[] parseSnakes(Object snakes)
+    {
+        return null;
+    }
     
     private static class Snake
     {
