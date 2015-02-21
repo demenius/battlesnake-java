@@ -1,6 +1,8 @@
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -12,7 +14,7 @@ public class BattleSnakeHandlers {
         Map<String, Object> responseObject = new HashMap<String, Object>();
         responseObject.put("name", "Inland-Taipans");
         responseObject.put("color", "#80F700");
-        responseObject.put("head_url", "https://inland-taipans.herokuapp.com/");
+        responseObject.put("head_url", "https://img.4plebs.org/boards/s4s/image/1390/48/1390481001892.png");
         responseObject.put("taunt", "Get Shreked: " + Board.width + ":" + Board.height);
         return responseObject;
     }
@@ -33,7 +35,6 @@ public class BattleSnakeHandlers {
 
     private void parseStart(Map<String, Object> requestBody)
     {
-        
         Board.game_id = requestBody.get("game_id").toString();
         Board.width = (Integer)requestBody.get("width");
         Board.height = (Integer)requestBody.get("width");
@@ -43,30 +44,53 @@ public class BattleSnakeHandlers {
     {
         Board.game_id = requestBody.get("game_id").toString();
         Board.turn = (Integer)requestBody.get("turn");
-        Board.board = parseBoardTiles(requestBody.get("board"));
-        Board.snakes = parseSnakes(requestBody.get("snakes"));
-        Board.food = null;//(int[][])((Integer[][]) requestBody.get("food"));
+        parseBoardTiles((Map<String,String>[][])requestBody.get("board"));
+        parseSnakes((Map<String,Object>[])requestBody.get("snakes"));
+        Board.food = (int[][])(requestBody.get("food"));
     }
     
-    private BoardTile[][] parseBoardTiles(Object tiles)
+    private void parseBoardTiles(Map<String,String>[][] tiles)
     {
-        return null;
+        for(int i = 0; i < Board.width; i++)
+        {
+            for(int j = 0; j < Board.height; j++)
+            {
+                ((BoardTile)Board.board[i][j]).state = BoardTile.State.getState(tiles[i][j].get("state"));
+                String snake = tiles[i][j].get("snake");
+                ((BoardTile)Board.board[i][j]).snake = Board.snakes.get(snake);
+            }
+        }
     }
     
-    private Snake[] parseSnakes(Object snakes)
+    private void parseSnakes(Map<String,Object>[] snakes)
     {
-        return null;
+        for(int j = 0; j < snakes.length; j++)
+        {
+            String snake = snakes[j].get("name").toString();
+            if(!Board.snakes.containsKey(snake))
+                Board.snakes.put(snake, new Snake(snake));
+            
+            Board.snakes.get(snake).state = snakes[j].get("state").toString();
+            Board.snakes.get(snake).coords = (int[][])snakes[j].get("coords");
+            Board.snakes.get(snake).score = (Integer)snakes[j].get("score");
+            Board.snakes.get(snake).color = (Integer)snakes[j].get("color");
+            Board.snakes.get(snake).head_url = snakes[j].get("head_url").toString();
+            Board.snakes.get(snake).taunt = snakes[j].get("taunt").toString();
+            
+        }
     }
     
-    private static class Snake
+    private class Snake
     {
-        public static String name;
-        public static String state;
-        public static int[][] coords;
-        public static int score;
-        public static int color;
-        public static String head_url;
-        public static String taunt;
+        public String name;
+        public String state;
+        public int[][] coords;
+        public int score;
+        public int color;
+        public String head_url;
+        public String taunt;
+        
+        public Snake(String s) {name = s;}
     }
     
     private static class Board
@@ -76,15 +100,28 @@ public class BattleSnakeHandlers {
         
         public static String game_id;
         public static int turn;
-        public static BoardTile[][] board;
-        public static Snake[] snakes;
+        public static BoardTile[][] board = new BoardTile[width][height];
+        public static Map<String, Snake> snakes = new HashMap<String, Snake>();
         public static int[][] food;
     }
     
-    private static class BoardTile
+    public static class BoardTile
     {
-        public enum State {HEAD, BODY, FOOD, EMPTY}
-        public static State state;
-        public static Snake snake;
+        public enum State
+        {
+            HEAD, BODY, FOOD, EMPTY;
+            
+            public static State getState(String s)
+            {
+                if(s.equals("head")) return HEAD;
+                if(s.equals("body")) return BODY;
+                if(s.equals("food")) return FOOD;
+                if(s.equals("empty")) return EMPTY;
+                return null;
+            }
+        }
+        
+        public State state = State.EMPTY;
+        public Snake snake = null;
     }
 }
