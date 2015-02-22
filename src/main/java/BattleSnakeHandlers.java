@@ -233,7 +233,7 @@ public class BattleSnakeHandlers
             if (Board.distanceMap[x - 1][y] == maxDist)
             {
                 System.err.println("Calc x-1: for x:" + x + " y: " + y);
-                Board.distanceMap[x - 1][y] = -1;
+                Board.distanceMap[x][y] = -1;
                 calcDist(x - 1, y);
             }
             bestDist = Board.distanceMap[x - 1][y];
@@ -245,7 +245,7 @@ public class BattleSnakeHandlers
             if (Board.distanceMap[x + 1][y] == maxDist)
             {
                 System.err.println("Calc x+1: for x:" + x + " y: " + y);
-                Board.distanceMap[x + 1][y] = -1;
+                Board.distanceMap[x][y] = -1;
                 calcDist(x + 1, y);
             }
             if (Board.distanceMap[x + 1][y] < bestDist)
@@ -260,7 +260,7 @@ public class BattleSnakeHandlers
             if (Board.distanceMap[x][y - 1] == maxDist)
             {
                 System.err.println("Calc y-1: for x:" + x + " y: " + y);
-                Board.distanceMap[x][y - 1] = -1;
+                Board.distanceMap[x][y] = -1;
                 calcDist(x, y - 1);
             }
             if (Board.distanceMap[x][y - 1] < bestDist)
@@ -275,7 +275,7 @@ public class BattleSnakeHandlers
             if (Board.distanceMap[x][y + 1] == maxDist)
             {
                 System.err.println("Calc y+1: for x:" + x + " y: " + y);
-                Board.distanceMap[x][y + 1] = -1;
+                Board.distanceMap[x][y] = -1;
                 calcDist(x, y + 1);
             }
             if (Board.distanceMap[x][y + 1] < bestDist)
