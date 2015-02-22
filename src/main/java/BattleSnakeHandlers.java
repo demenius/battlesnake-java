@@ -25,7 +25,14 @@ public class BattleSnakeHandlers
     {
         // Dummy Response
         Map<String, Object> responseObject = new HashMap<String, Object>();
-        responseObject.put("move", dfooddist());
+        
+        String dir = curDir();
+        int[] f = ourCoords();
+        int[] t = getCoords(dir);
+        if(safeMove(t[0]-f[0], t[1]-f[1]))
+            responseObject.put("move", dir);
+        else
+            responseObject.put("move", dfooddist());
         responseObject.put("taunt", "Get Shreked: " + Board.width + ":" + Board.height);
         return responseObject;
     }
@@ -111,39 +118,22 @@ public class BattleSnakeHandlers
 
     public boolean mvleft()
     {
-        if (Board.ours.coords[1][0] == 0)
-        {
-            return false;
-        }
-        return coordToTile(ourCoords(-1,0)).state != BoardTile.State.HEAD && coordToTile(ourCoords(-1,0)).state != BoardTile.State.BODY;
+        return safeMove(-1, 0);
     }
 
     public boolean mvup()
     {
-        if (Board.ours.coords[1][1] == 0)
-        {
-            return false;
-        }
-        return coordToTile(ourCoords(0,-1)).state != BoardTile.State.HEAD && coordToTile(ourCoords(0,-1)).state != BoardTile.State.BODY;
+        return safeMove(0,-1);
     }
 
     public boolean mvright()
     {
-        if (Board.ours.coords[1][0] == Board.board.length - 1)
-        {
-            return false;
-        }
-        return coordToTile(ourCoords(1,0)).state != BoardTile.State.HEAD && coordToTile(ourCoords(1,0)).state != BoardTile.State.BODY;
+        return safeMove(1,0);
     }
 
     public boolean mvdown()
     {
-        if (Board.ours.coords[0][0] == Board.board.length - 1) // Check For Bottom Wall
-        {
-            return false;
-        }
-        
-        return coordToTile(ourCoords(0,1)).state != BoardTile.State.HEAD && coordToTile(ourCoords(0,1)).state != BoardTile.State.BODY;
+        return safeMove(0,1);
     }
 
     public int absval(int n)
@@ -153,6 +143,17 @@ public class BattleSnakeHandlers
             n *= -1;
         }
         return n;
+    }
+    
+    private int[] getCoords(String dir)
+    {
+        if(reverseDir().equals("left"))
+            return ourCoords(-1, 0);
+        if(reverseDir().equals("right"))
+            return ourCoords(1, 0);
+        if(reverseDir().equals("up"))
+            return ourCoords(0, -1);
+        return ourCoords(0, 1);
     }
     
     private int[] ourCoords(int x, int y)
@@ -193,9 +194,22 @@ public class BattleSnakeHandlers
             return "up";
         return "down";
     }
-
-    private boolean safeMove()
+    
+    private String curDir()
     {
+        if(reverseDir().equals("left"))
+            return "right";
+        if(reverseDir().equals("right"))
+            return "left";
+        if(reverseDir().equals("up"))
+            return "down";
+        return "up";
+    }
+
+    private boolean safeMove(int x, int y)
+    {
+        if(ourCoords(x,y)[0] < 0 || ourCoords(x,y)[0] >= Board.width || ourCoords(x,y)[1] < 0 || ourCoords(x,y)[1] >= Board.height)
+            return coordToTile(ourCoords(x,y)).state != BoardTile.State.HEAD && coordToTile(ourCoords(x,y)).state != BoardTile.State.BODY;
         return false;
     }
     
