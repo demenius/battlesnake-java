@@ -50,9 +50,9 @@ public class BattleSnakeHandlers
     private String foodDirection()
     {
         findFoodDistances();
-        for(int i = 0; i < Board.width; i++)
+        for (int i = 0; i < Board.width; i++)
         {
-            for(int j = 0; j < Board.height; j++)
+            for (int j = 0; j < Board.height; j++)
             {
                 System.err.print("[" + Board.distanceMap[i][j] + "]");
             }
@@ -61,17 +61,23 @@ public class BattleSnakeHandlers
         int[] t = findShortestFoodCoord();
         return coordToDir(shortestPath(t[0], t[1]));
     }
-    
+
     private String coordToDir(int[] c)
     {
-        if(getNextCoords("left") == c)
+        if (getNextCoords("left") == c)
+        {
             return "left";
-        if(getNextCoords("right") == c)
+        }
+        if (getNextCoords("right") == c)
+        {
             return "right";
-        if(getNextCoords("up") == c)
+        }
+        if (getNextCoords("up") == c)
+        {
             return "up";
+        }
         return "down";
-        
+
     }
 
     private int[] shortestPath(int x, int y)
@@ -88,27 +94,33 @@ public class BattleSnakeHandlers
                 if (Board.distanceMap[x - 1][y] < Board.distanceMap[x][y + 1])  // Competing x-1, y+1    
                 {
                     return shortestPath(x - 1, y);                              // x-1 Won
-                } else                                                                
+                } else
                 {
                     return shortestPath(x, y + 1);                              // y+1 Won
                 }
             } else if (Board.distanceMap[x][y - 1] < Board.distanceMap[x][y + 1])// Competing y-1, y+1
             {
                 return shortestPath(x, y - 1);                                  // y-1 Won
-            } else                                                             
+            } else
             {
                 return shortestPath(x, y + 1);                                  // y+1 Won
             }
-        } else if (Board.distanceMap[x+1][y] < Board.distanceMap[x][y - 1])     // Competing x+1, y-1, y+1
+        } else if (Board.distanceMap[x + 1][y] < Board.distanceMap[x][y - 1])     // Competing x+1, y-1, y+1
         {
-            if(Board.distanceMap[x+1][y] < Board.distanceMap[x][y + 1])         // Competing x+1, y+1
+            if (Board.distanceMap[x + 1][y] < Board.distanceMap[x][y + 1])         // Competing x+1, y+1
+            {
                 return shortestPath(x + 1, y);                                  // x+1 Won
-            else                                                               
-                return shortestPath(x, y+1);                                    // y+1 Won
-        } else if(Board.distanceMap[x][y-1] < Board.distanceMap[x][y + 1])      // Competing y-1, y+1
-                return shortestPath(x, y-1);                                    // y-1 Won
-            else                                                               
-                return shortestPath(x, y+1);                                    // y+1 Won
+            } else
+            {
+                return shortestPath(x, y + 1);                                    // y+1 Won
+            }
+        } else if (Board.distanceMap[x][y - 1] < Board.distanceMap[x][y + 1])      // Competing y-1, y+1
+        {
+            return shortestPath(x, y - 1);                                    // y-1 Won
+        } else
+        {
+            return shortestPath(x, y + 1);                                    // y+1 Won
+        }
     }
 
     private int[] toIntArray(int x, int y)
@@ -128,12 +140,12 @@ public class BattleSnakeHandlers
         {
             int x = Board.food[i][0];
             int y = Board.food[i][1];
-                    if (Board.distanceMap[x][y] < shortest)
-                    {
-                        shortest = Board.distanceMap[x][y];
-                        coord[0] = x;
-                        coord[1] = y;
-                    }
+            if (Board.distanceMap[x][y] < shortest)
+            {
+                shortest = Board.distanceMap[x][y];
+                coord[0] = x;
+                coord[1] = y;
+            }
         }
         return coord;
     }
@@ -148,27 +160,34 @@ public class BattleSnakeHandlers
 
     private int calcDist(int x, int y)
     {
-        if(x == ourCoords()[0] && y == ourCoords()[1])
+        if (x == ourCoords()[0] && y == ourCoords()[1])
+        {
             return 0;
-        
-        
+        }
+
         int maxDist = Board.width * Board.height;
         int bestDist = maxDist;
 
-        if (x > 0 && Board.distanceMap[x - 1][y] != -1)
+        if (x - 1 > 0 && Board.distanceMap[x - 1][y] != -1)
         {
             if (Board.distanceMap[x - 1][y] == maxDist)
             {
-                return calcDist(x - 1, y);
+                Board.distanceMap[x - 1][y] -= 1;
+                int calc = calcDist(x - 1, y);
+                Board.distanceMap[x - 1][y] += 1;
+                return calc;
             }
             bestDist = Board.distanceMap[x - 1][y];
         }
 
-        if (x <= Board.width && Board.distanceMap[x + 1][y] != -1)
+        if (x + 1 <= Board.width && Board.distanceMap[x + 1][y] != -1)
         {
             if (Board.distanceMap[x + 1][y] == maxDist)
             {
-                return calcDist(x + 1, y);
+                Board.distanceMap[x + 1][y] -= 1;
+                int calc = calcDist(x + 1, y);
+                Board.distanceMap[x + 1][y] += 1;
+                return calc;
             }
             if (Board.distanceMap[x + 1][y] < bestDist)
             {
@@ -176,11 +195,14 @@ public class BattleSnakeHandlers
             }
         }
 
-        if (y > 0 && Board.distanceMap[x][y - 1] != -1)
+        if (y - 1 > 0 && Board.distanceMap[x][y - 1] != -1)
         {
             if (Board.distanceMap[x][y - 1] == maxDist)
             {
-                return calcDist(x, y - 1);
+                Board.distanceMap[x][y - 1] -= 1;
+                int calc = calcDist(x, y - 1);
+                Board.distanceMap[x][y - 1] += 1;
+                return calc;
             }
             if (Board.distanceMap[x][y - 1] < bestDist)
             {
@@ -192,7 +214,10 @@ public class BattleSnakeHandlers
         {
             if (Board.distanceMap[x][y + 1] == maxDist)
             {
-                return calcDist(x, y + 1);
+                Board.distanceMap[x][y + 1] -= 1;
+                int calc = calcDist(x, y + 1);
+                Board.distanceMap[x][y + 1] += 1;
+                return calc;
             }
             if (Board.distanceMap[x][y + 1] < bestDist)
             {
@@ -208,25 +233,24 @@ public class BattleSnakeHandlers
     }
 
     /*public boolean mvleft()
-    {
-        return safeMove(-1, 0);
-    }
+     {
+     return safeMove(-1, 0);
+     }
 
-    public boolean mvup()
-    {
-        return safeMove(0, -1);
-    }
+     public boolean mvup()
+     {
+     return safeMove(0, -1);
+     }
 
-    public boolean mvright()
-    {
-        return safeMove(1, 0);
-    }
+     public boolean mvright()
+     {
+     return safeMove(1, 0);
+     }
 
-    public boolean mvdown()
-    {
-        return safeMove(0, 1);
-    }*/
-
+     public boolean mvdown()
+     {
+     return safeMove(0, 1);
+     }*/
     private int[] getNextCoords(String dir)
     {
         if (dir.equals("left"))
@@ -307,21 +331,20 @@ public class BattleSnakeHandlers
         return "up";
     }
 
-   /* private boolean safeMove2(int x, int y)
-    {
-        return isSafeMove2(ourCoords(x, y));
-    }
+    /* private boolean safeMove2(int x, int y)
+     {
+     return isSafeMove2(ourCoords(x, y));
+     }
 
-    private boolean isSafeMove2(int[] c)
-    {
-        System.err.println("CHECK SAFE MOVE: " + c[0] + ":" + c[1]);
-        if (c[0] > 1 && c[0] < Board.width && c[1] > 1 && c[1] < Board.height)
-        {
-            return coordToTile(c).state != BoardTile.State.HEAD && coordToTile(c).state != BoardTile.State.BODY;
-        }
-        return false;
-    }*/
-
+     private boolean isSafeMove2(int[] c)
+     {
+     System.err.println("CHECK SAFE MOVE: " + c[0] + ":" + c[1]);
+     if (c[0] > 1 && c[0] < Board.width && c[1] > 1 && c[1] < Board.height)
+     {
+     return coordToTile(c).state != BoardTile.State.HEAD && coordToTile(c).state != BoardTile.State.BODY;
+     }
+     return false;
+     }*/
     private void parseStart(Map<String, Object> requestBody)
     {
         Board.game_id = requestBody.get("game_id").toString();
@@ -355,10 +378,13 @@ public class BattleSnakeHandlers
             for (int j = 0; j < Board.height; j++)
             {
                 ((BoardTile) Board.board[i][j]).state = BoardTile.State.getState(tiles.get(i).get(j).toString());
-                if(Board.board[i][j].state == BoardTile.State.BODY || Board.board[i][j].state == BoardTile.State.HEAD)
+                if (Board.board[i][j].state == BoardTile.State.BODY || Board.board[i][j].state == BoardTile.State.HEAD)
+                {
                     Board.distanceMap[i][j] = -1;
-                else
+                } else
+                {
                     Board.distanceMap[i][j] = Board.width * Board.height;
+                }
             }
         }
     }
@@ -415,6 +441,7 @@ public class BattleSnakeHandlers
         public static int turn;
         public static BoardTile[][] board;
         public static int[][] distanceMap;
+        public static int[][] checkMap;
         public static Map<String, Snake> snakes = new HashMap<String, Snake>();
         public static int[][] food;
     }
