@@ -30,8 +30,9 @@ public class BattleSnakeHandlers
         Map<String, Object> responseObject = new HashMap<String, Object>();
 
         String dir = curDir();
-        int[] f = ourCoords();
+        System.err.println("Our Coords: " + ourCoords()[0] + ":" + ourCoords()[1]);
         int[] t = getCoords(dir);
+        System.err.println("Next Coords: " + t[0] + ":" + t[1]);
         if (safeMove(t))
         {
             responseObject.put("move", dir);
@@ -241,6 +242,7 @@ public class BattleSnakeHandlers
     
     private boolean safeMove(int[] c)
     {
+        System.err.println("SAFE MOVE: " + c[0] + ":" + c[1]);
         if (c[0] > 1 || c[0] < Board.width || c[1] > 1 || c[1] < Board.height)
         {
             return coordToTile(c).state != BoardTile.State.HEAD && coordToTile(c).state != BoardTile.State.BODY;
