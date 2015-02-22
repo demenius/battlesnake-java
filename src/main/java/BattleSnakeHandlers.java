@@ -90,7 +90,7 @@ public class BattleSnakeHandlers
         {
             if(checkXY(x1,y1))
             {
-                return Board.distanceMap[x1][y1] < Board.distanceMap[x2][y2] ? 0 : 1;
+                return Board.distanceMap[x1][y1] <= Board.distanceMap[x2][y2] ? 0 : 1;
             } else 
                 return 0;
         } else if(checkXY(x2,y2))
@@ -121,7 +121,6 @@ public class BattleSnakeHandlers
 
     private int[] shortestPath(int x, int y)
     {
-        System.err.println("X: " + x + " Y: " + y);
         int x0VSx1 = whichOne(x-1, y, x+1, y);
         
         int x0VSy0 = whichOne(x-1, y, x, y-1);
