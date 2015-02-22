@@ -224,6 +224,7 @@ public class BattleSnakeHandlers
         Board.game_id = requestBody.get("game_id").toString();
         Board.width = (Integer) requestBody.get("width");
         Board.height = (Integer) requestBody.get("width");
+        Board.board = new BoardTile[Board.width][Board.height];
     }
 
     private void parseBoard(Map<String, Object> requestBody)
