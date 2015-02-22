@@ -9,6 +9,7 @@ import java.util.Queue;
 
 public class BattleSnakeHandlers
 {
+
     public static String NAME = "Retro-Fire";
 
     public Object handleStart(Map<String, Object> requestBody)
@@ -29,19 +30,8 @@ public class BattleSnakeHandlers
         // Dummy Response
         Map<String, Object> responseObject = new HashMap<String, Object>();
 
-        String dir = curDir();
-        System.err.println("Our Coords: " + ourCoords()[0] + ":" + ourCoords()[1]);
-        int[] t = getNextCoords(dir);
-        System.err.println("Next Coords: " + t[0] + ":" + t[1]);
-        if (safeMove(t))
-        {
-            responseObject.put("move", dir);
-        } else
-        {
-            dir = dfooddist();
-            responseObject.put("move", dir);
-        }
-        responseObject.put("taunt", dir);
+        responseObject.put("move", getMove());
+        responseObject.put("taunt", "Get Shreked");
         return responseObject;
     }
 
@@ -52,76 +42,167 @@ public class BattleSnakeHandlers
         return responseObject;
     }
 
-    //--------------EVANS CODE------------------------
-    public void stateSelect(Map<String, Object> board, Object mySnake)
+    private String getMove()
     {
-        /*if(checkSafety == -1)Survival(board, mysnake);
-         else if(mySnake.score < Val) Hungry(board, mySnake);
-         else if(mySnake.life < 50) Hungry(board, mySnake);
-         else Aggressive(board, mySnake);*/
-
+        return foodDirection();
     }
 
-    public void Aggressive(Map<String, Object> board, Object mySnake)
+    private String foodDirection()
     {
-        /*Object enemy = checkEnemyDistanceLength(); // should choose a target
-         attack(enemy); // moves toward enemy*/
+        findFoodDistances();
+        int[] t = findShortestFoodCoord();
+        return coordToDir(shortestPath(t[0], t[1]));
+    }
+    
+    private String coordToDir(int[] c)
+    {
+        if(getNextCoords("left") == c)
+            return "left";
+        if(getNextCoords("right") == c)
+            return "right";
+        if(getNextCoords("up") == c)
+            return "up";
+        return "down";
+        
     }
 
-    public void attack(Map<String, Object> board, Object mySnake, Object enemy)
+    private int[] shortestPath(int x, int y)
     {
-        // Move toward enemy, block, or collide
-        //if()
-    }
-
-    public void Hungry(Map<String, Object> board, Object mySnake)
-    {
-        // Move toward food
-        //dfooddist(board, );
-
-    }
-
-    public void Survival(Map<String, Object> board, Object mysnake)
-    {
-        //playSafe();
-    }
-
-    //-------------TIMS CODE--------------------------
-    public String dfooddist()
-    {
-        int[][] myboard = new int[Board.board.length][Board.board[0].length];
-        for (int i = 0; i < myboard.length; i++)
+        if (ourCoords()[0] == x && ourCoords()[1] == y)
         {
-            for (int j = 0; j < myboard[i].length; j++)
+            return toIntArray(x, y);
+        }
+
+        if (Board.distanceMap[x - 1][y] < Board.distanceMap[x + 1][y])          // Competing x-1, x+1, y-1, y+1
+        {
+            if (Board.distanceMap[x - 1][y] < Board.distanceMap[x][y - 1])      // Competing x-1, y-1, y+1
             {
-                myboard[i][j] = -1;
+                if (Board.distanceMap[x - 1][y] < Board.distanceMap[x][y + 1])  // Competing x-1, y+1    
+                {
+                    return shortestPath(x - 1, y);                              // x-1 Won
+                } else                                                                
+                {
+                    return shortestPath(x, y + 1);                              // y+1 Won
+                }
+            } else if (Board.distanceMap[x][y - 1] < Board.distanceMap[x][y + 1])// Competing y-1, y+1
+            {
+                return shortestPath(x, y - 1);                                  // y-1 Won
+            } else                                                             
+            {
+                return shortestPath(x, y + 1);                                  // y+1 Won
+            }
+        } else if (Board.distanceMap[x+1][y] < Board.distanceMap[x][y - 1])     // Competing x+1, y-1, y+1
+        {
+            if(Board.distanceMap[x+1][y] < Board.distanceMap[x][y + 1])         // Competing x+1, y+1
+                return shortestPath(x + 1, y);                                  // x+1 Won
+            else                                                               
+                return shortestPath(x, y+1);                                    // y+1 Won
+        } else if(Board.distanceMap[x][y-1] < Board.distanceMap[x][y + 1])      // Competing y-1, y+1
+                return shortestPath(x, y-1);                                    // y-1 Won
+            else                                                               
+                return shortestPath(x, y+1);                                    // y+1 Won
+    }
+
+    private int[] toIntArray(int x, int y)
+    {
+        int[] t =
+        {
+            x, y
+        };
+        return t;
+    }
+
+    private int[] findShortestFoodCoord()
+    {
+        int shortest = Board.width * Board.height;
+        int coord[] = new int[2];
+        for (int i = 0; i < Board.width; i++)
+        {
+            for (int j = 0; j < Board.height; j++)
+            {
+                if (coordToTile(i, j).state == BoardTile.State.FOOD)
+                {
+                    if (Board.distanceMap[i][j] < shortest)
+                    {
+                        shortest = Board.distanceMap[i][j];
+                        coord[0] = i;
+                        coord[1] = j;
+                    }
+                }
             }
         }
-        myboard[ours().coords[1][0]][ours().coords[1][1]] = 0;
-        Queue<int[]> q = new LinkedList<int[]>();
+        return coord;
+    }
 
-        int dist = 0;
-        if (mvleft())
+    private void findFoodDistances()
+    {
+        for (int i = 0; i < Board.width; i++)
         {
-            q.add(ourCoords(-1, 0));
-            return "left";
+            for (int j = 0; j < Board.height; j++)
+            {
+                if (coordToTile(i, j).state == BoardTile.State.FOOD)
+                {
+                    calcDist(i, j);
+                }
+            }
         }
-        if (mvup())
+    }
+
+    private int calcDist(int x, int y)
+    {
+        int maxDist = Board.width * Board.height;
+        int bestDist = maxDist;
+
+        if (x > 0 && Board.distanceMap[x - 1][y] != -1)
         {
-            q.add(ourCoords(0, -1));
-            return "up";
+            if (Board.distanceMap[x - 1][y] == maxDist)
+            {
+                return calcDist(x - 1, y);
+            }
+            bestDist = Board.distanceMap[x - 1][y];
         }
-        if (mvright())
+
+        if (x <= Board.width && Board.distanceMap[x + 1][y] != -1)
         {
-            q.add(ourCoords(1, 0));
-            return "right";
+            if (Board.distanceMap[x + 1][y] == maxDist)
+            {
+                return calcDist(x + 1, y);
+            }
+            if (Board.distanceMap[x + 1][y] < bestDist)
+            {
+                bestDist = Board.distanceMap[x + 1][y];
+            }
         }
-        if (mvdown())
+
+        if (y > 0 && Board.distanceMap[x][y - 1] != -1)
         {
-            q.add(ourCoords(0, 1));
-            return "down";
+            if (Board.distanceMap[x][y - 1] == maxDist)
+            {
+                return calcDist(x, y - 1);
+            }
+            if (Board.distanceMap[x][y - 1] < bestDist)
+            {
+                bestDist = Board.distanceMap[x][y - 1];
+            }
         }
-        return null;
+
+        if (y <= Board.height && Board.distanceMap[x][y + 1] != -1)
+        {
+            if (Board.distanceMap[x][y + 1] == maxDist)
+            {
+                return calcDist(x, y + 1);
+            }
+            if (Board.distanceMap[x][y + 1] < bestDist)
+            {
+                bestDist = Board.distanceMap[x][y + 1];
+            }
+        }
+
+        if (bestDist + 1 < Board.distanceMap[x][y])
+        {
+            Board.distanceMap[x][y] = bestDist + 1;
+        }
+        return Board.distanceMap[x][y];
     }
 
     public boolean mvleft()
@@ -142,15 +223,6 @@ public class BattleSnakeHandlers
     public boolean mvdown()
     {
         return safeMove(0, 1);
-    }
-
-    public int absval(int n)
-    {
-        if (n < 0)
-        {
-            n *= -1;
-        }
-        return n;
     }
 
     private int[] getNextCoords(String dir)
@@ -191,14 +263,12 @@ public class BattleSnakeHandlers
 
     private BoardTile coordToTile(int[] t)
     {
-        return Board.board[t[0]][t[1]];
+        return coordToTile(t[0], t[1]);
     }
 
-    private String checkShute()
+    private BoardTile coordToTile(int x, int y)
     {
-        String dir = "up";
-
-        return dir;
+        return Board.board[x][y];
     }
 
     private String reverseDir()
@@ -237,10 +307,10 @@ public class BattleSnakeHandlers
 
     private boolean safeMove(int x, int y)
     {
-        return safeMove(ourCoords(x,y));
+        return isSafeMove(ourCoords(x, y));
     }
-    
-    private boolean safeMove(int[] c)
+
+    private boolean isSafeMove(int[] c)
     {
         System.err.println("CHECK SAFE MOVE: " + c[0] + ":" + c[1]);
         if (c[0] > 1 && c[0] < Board.width && c[1] > 1 && c[1] < Board.height)
@@ -271,7 +341,7 @@ public class BattleSnakeHandlers
         Board.turn = (Integer) requestBody.get("turn");
         parseBoardTiles((ArrayList<ArrayList<Object>>) requestBody.get("board"));
         parseSnakes((ArrayList<Map<String, Object>>) requestBody.get("snakes"));
-        Board.food = toDoubleIntArray((ArrayList<ArrayList<Integer>>)requestBody.get("food"));
+        Board.food = toDoubleIntArray((ArrayList<ArrayList<Integer>>) requestBody.get("food"));
     }
 
     private void parseBoardTiles(ArrayList<ArrayList<Object>> tiles)
@@ -295,16 +365,15 @@ public class BattleSnakeHandlers
             {
                 Board.snakes.put(snake, new Snake(snake));
             }
-            
 
-            Board.snakes.get(snake).coords = toDoubleIntArray((ArrayList<ArrayList<Integer>>)m.get("coords"));
+            Board.snakes.get(snake).coords = toDoubleIntArray((ArrayList<ArrayList<Integer>>) m.get("coords"));
         }
     }
-    
+
     private int[][] toDoubleIntArray(ArrayList<ArrayList<Integer>> t)
     {
         int[][] c = new int[t.size()][2];
-        for(int i = 0; i < t.size(); i++)
+        for (int i = 0; i < t.size(); i++)
         {
             c[i][0] = t.get(i).get(0);
             c[i][1] = t.get(i).get(1);
@@ -338,6 +407,7 @@ public class BattleSnakeHandlers
         public static String game_id;
         public static int turn;
         public static BoardTile[][] board = new BoardTile[width][height];
+        public static int[][] distanceMap = new int[width][height];
         public static Map<String, Snake> snakes = new HashMap<String, Snake>();
         public static int[][] food;
     }
