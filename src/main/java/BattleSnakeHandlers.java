@@ -17,7 +17,7 @@ public class BattleSnakeHandlers
         responseObject.put("name", "Inland-Taipans");
         responseObject.put("color", "#80F700");
         responseObject.put("head_url", "https://img.4plebs.org/boards/s4s/image/1390/48/1390481001892.png");
-        responseObject.put("taunt", "Get Shreked: " + Board.width + ":" + Board.height);
+        responseObject.put("taunt", "Get Shreked");
         return responseObject;
     }
 
@@ -89,7 +89,7 @@ public class BattleSnakeHandlers
                 myboard[i][j] = -1;
             }
         }
-        myboard[Board.ours.coords[1][0]][Board.ours.coords[1][1]] = 0;
+        myboard[ours().coords[1][0]][ours().coords[1][1]] = 0;
         Queue<int[]> q = new LinkedList<int[]>();
 
         int dist = 0;
@@ -167,7 +167,12 @@ public class BattleSnakeHandlers
     
     private int[] ourCoords()
     {
-        return Board.ours.coords[0];
+        return ours().coords[0];
+    }
+    
+    private Snake ours()
+    {
+        return Board.snakes.get("Inland-Taipans");
     }
     
     private BoardTile coordToTile(int[] t)
@@ -186,11 +191,11 @@ public class BattleSnakeHandlers
     
     private String reverseDir()
     {
-        if(Board.ours.coords[0][0] < Board.ours.coords[1][0])
+        if(ours().coords[0][0] < ours().coords[1][0])
             return "left";
-        if(Board.ours.coords[0][0] > Board.ours.coords[1][0])
+        if(ours().coords[0][0] > ours().coords[1][0])
             return "right";
-        if(Board.ours.coords[0][1] < Board.ours.coords[1][1])
+        if(ours().coords[0][1] < ours().coords[1][1])
             return "up";
         return "down";
     }
@@ -218,8 +223,6 @@ public class BattleSnakeHandlers
         Board.game_id = requestBody.get("game_id").toString();
         Board.width = (Integer) requestBody.get("width");
         Board.height = (Integer) requestBody.get("width");
-        Board.ours = new Snake("Inland-Taipans");
-        Board.snakes.put(Board.ours.name, Board.ours);
     }
 
     private void parseBoard(Map<String, Object> requestBody)
@@ -290,7 +293,6 @@ public class BattleSnakeHandlers
         public static String game_id;
         public static int turn;
         public static BoardTile[][] board = new BoardTile[width][height];
-        public static Snake ours;
         public static Map<String, Snake> snakes = new HashMap<String, Snake>();
         public static int[][] food;
     }
