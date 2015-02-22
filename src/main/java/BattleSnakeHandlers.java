@@ -110,15 +110,14 @@ public class BattleSnakeHandlers
     {
         return (y >= 0 && y < Board.height);
     }
+    
+    private boolean isHead(int x, int y)
+    {
+        return (ourCoords()[0] == x && ourCoords()[1] == y);
+    }
 
     private int[] shortestPath(int x, int y)
     {
-        if (ourCoords()[0] == x && ourCoords()[1] == y)
-        {
-            return toIntArray(x, y);
-        }
-        
-        
         int x0VSx1 = whichOne(x-1, y, x+1, y);
         
         int x0VSy0 = whichOne(x-1, y, x, y-1);
@@ -131,15 +130,23 @@ public class BattleSnakeHandlers
         
         if(x0VSx1 == 0 && x0VSy0 == 0 && x0VSy1 == 0)
         {
+            if(isHead(x-1, y))
+                return toIntArray(x-1, y);
             return shortestPath(x-1, y);
         } else if(x0VSx1 == 1 && x1VSy0 == 0 && x1VSy1 == 0)
         {
+            if(isHead(x+1, y))
+                return toIntArray(x+1, y);
             return shortestPath(x+1, y);
         } else if(x0VSy0 == 1 && x1VSy0 == 1 && y0VSy1 == 0)
         {
+            if(isHead(x, y-1))
+                return toIntArray(x, y-1);
             return shortestPath(x, y-1);
         } else
         {
+            if(isHead(x, y+1))
+                return toIntArray(x, y+1);
             return shortestPath(x, y+1);
         }
         
