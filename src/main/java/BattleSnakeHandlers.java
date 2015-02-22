@@ -229,11 +229,11 @@ public class BattleSnakeHandlers
             {
                 Board.distanceMap[x2][y2] = curDist + 1;
                 calcDist(x2, y2);
-            } else if(Board.distanceMap[x2][y2] < curDist)
+            }/* else if(Board.distanceMap[x2][y2] < curDist)
             {
                 Board.distanceMap[x1][y1] = Board.distanceMap[x2][y2]+1;
                 calcDist(x1, y1);
-            }
+            }*/
         }
     }
 
