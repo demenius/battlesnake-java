@@ -59,7 +59,7 @@ public class BattleSnakeHandlers
             }
             System.err.println();
         }
-        return coordToDir(shortestPath(t[0], t[1]));
+        return coordToDir(shortestPath(t[0], t[1], -1));
     }
 
     private String coordToDir(int[] c)
@@ -119,7 +119,11 @@ public class BattleSnakeHandlers
         return (ourCoords()[0] == x && ourCoords()[1] == y);
     }
 
-    private int[] shortestPath(int x, int y)
+    // Mov = 0 : x-1
+    // Mov = 1 : x+1
+    // Mov = 2 : y-1
+    // Mov = 3 : y+1
+    private int[] shortestPath(int x, int y, int mov)
     {
         int x0VSx1 = whichOne(x-1, y, x+1, y);
         
@@ -135,64 +139,46 @@ public class BattleSnakeHandlers
         {
             if(isHead(x-1, y))
                 return toIntArray(x, y);
-            return shortestPath(x-1, y);
-        } else if(x0VSx1 == 1 && x1VSy0 == 0 && x1VSy1 == 0)
+            if(mov != 1)
+                return shortestPath(x-1, y, 0);
+            else
+            {
+                x0VSx1 = 1;
+                x0VSy0 = 1;
+                x0VSy1 = 1;
+            }
+        }
+        if(x0VSx1 == 1 && x1VSy0 == 0 && x1VSy1 == 0)
         {
             if(isHead(x+1, y))
                 return toIntArray(x, y);
-            return shortestPath(x+1, y);
-        } else if(x0VSy0 == 1 && x1VSy0 == 1 && y0VSy1 == 0)
+            if(mov != 0)
+                return shortestPath(x+1, y, 1);
+            else
+            {
+                x1VSy0 = 1;
+                x1VSy1 = 1;
+            }
+        }
+        if(x0VSy0 == 1 && x1VSy0 == 1 && y0VSy1 == 0)
         {
             if(isHead(x, y-1))
                 return toIntArray(x, y);
-            return shortestPath(x, y-1);
-        } else if(x0VSy1 == 1 && x1VSy1 == 1 && y0VSy1 == 1)
+            if(mov != 3)
+                return shortestPath(x, y-1, 2);
+            else
+            {
+                y0VSy1 = 0;
+            }
+        }
+        if(x0VSy1 == 1 && x1VSy1 == 1 && y0VSy1 == 1)
         {
             if(isHead(x, y+1))
                 return toIntArray(x, y);
-            return shortestPath(x, y+1);
-        } else
-        {
-            return toIntArray(-1,-1);
+            if(mov != 2)
+                return shortestPath(x, y+1, 3);
         }
-        
-
-        /*if (x > 0 && x + 1 < Board.width && Board.distanceMap[x - 1][y] < Board.distanceMap[x + 1][y])          // Competing x-1, x+1, y-1, y+1
-        {
-            if (y > 0 && Board.distanceMap[x - 1][y] < Board.distanceMap[x][y - 1])      // Competing x-1, y-1, y+1
-            {
-                if(y + 1 < Board.height)
-                {
-                    if (Board.distanceMap[x - 1][y] < Board.distanceMap[x][y + 1])  // Competing x-1, y+1    
-                    {
-                        return shortestPath(x - 1, y);                              // x-1 Won
-                    } else
-                    {
-                        return shortestPath(x, y + 1);                              // y+1 Won
-                    }
-                } else 
-                    return shortestPath(x - 1, y);  
-                
-            } else 
-            {
-                if
-            }
-        } else if (Board.distanceMap[x + 1][y] < Board.distanceMap[x][y - 1])     // Competing x+1, y-1, y+1
-        {
-            if (Board.distanceMap[x + 1][y] < Board.distanceMap[x][y + 1])         // Competing x+1, y+1
-            {
-                return shortestPath(x + 1, y);                                  // x+1 Won
-            } else
-            {
-                return shortestPath(x, y + 1);                                    // y+1 Won
-            }
-        } else if (Board.distanceMap[x][y - 1] < Board.distanceMap[x][y + 1])      // Competing y-1, y+1
-        {
-            return shortestPath(x, y - 1);                                    // y-1 Won
-        } else
-        {
-            return shortestPath(x, y + 1);                                    // y+1 Won
-        }*/
+        return toIntArray(-1,-1);
     }
 
     private int[] toIntArray(int x, int y)
