@@ -285,17 +285,9 @@ public class BattleSnakeHandlers
             {
                 Board.snakes.put(snake, new Snake(snake));
             }
-
+            
 
             Board.snakes.get(snake).coords = getCoords((ArrayList<ArrayList<Integer>>)m.get("coords"));
-
-            Board.snakes.get(snake).score = (Integer) m.get("score");
-
-            Board.snakes.get(snake).color = (Integer) m.get("color");
-
-            Board.snakes.get(snake).head_url = m.get("hear_url").toString();
-
-            Board.snakes.get(snake).taunt = m.get("taunt").toString();
         }
     }
     
