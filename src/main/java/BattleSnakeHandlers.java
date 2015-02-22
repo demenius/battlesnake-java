@@ -230,20 +230,19 @@ public class BattleSnakeHandlers
     {
         Board.game_id = requestBody.get("game_id").toString();
         Board.turn = (Integer) requestBody.get("turn");
-        parseBoardTiles((Map<String, String>[][]) requestBody.get("board"));
+        parseBoardTiles((ArrayList<ArrayList<Object>>) requestBody.get("board"));
         parseSnakes((Map<String, Object>[]) requestBody.get("snakes"));
         Board.food = (int[][]) (requestBody.get("food"));
     }
 
-    private void parseBoardTiles(Map<String, String>[][] tiles)
+    private void parseBoardTiles(ArrayList<ArrayList<Object>> tiles)
     {
+        
         for (int i = 0; i < Board.width; i++)
         {
-            for (int j = 0; j < Board.height; j++)
+            for(int j = 0; j < Board.height; j++)
             {
-                ((BoardTile) Board.board[i][j]).state = BoardTile.State.getState(tiles[i][j].get("state"));
-                String snake = tiles[i][j].get("snake");
-                ((BoardTile) Board.board[i][j]).snake = Board.snakes.get(snake);
+                ((BoardTile) Board.board[i][j]).state = BoardTile.State.getState(tiles.get(i).get(j).toString());
             }
         }
     }
