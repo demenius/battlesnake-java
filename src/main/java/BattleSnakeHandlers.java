@@ -239,7 +239,7 @@ public class BattleSnakeHandlers
         Board.game_id = requestBody.get("game_id").toString();
         Board.turn = (Integer) requestBody.get("turn");
         parseBoardTiles((ArrayList<ArrayList<Object>>) requestBody.get("board"));
-        parseSnakes((ArrayList<Object>[]) requestBody.get("snakes"));
+        parseSnakes((ArrayList<ArrayList<Object>>) requestBody.get("snakes"));
         Board.food = (int[][]) (requestBody.get("food"));
     }
 
