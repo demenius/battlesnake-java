@@ -269,7 +269,7 @@ public class BattleSnakeHandlers
             }
         }
 
-        if (y < Board.height && Board.distanceMap[x][y + 1] != -1)
+        if (y + 1 < Board.height && Board.distanceMap[x][y + 1] != -1)
         {
             System.err.println("Check y+1: for x:" + x + " y: " + y);
             if (Board.distanceMap[x][y + 1] == maxDist)
