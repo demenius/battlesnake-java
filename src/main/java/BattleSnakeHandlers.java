@@ -285,6 +285,7 @@ public class BattleSnakeHandlers
             {
                 Board.snakes.put(snake, new Snake(snake));
             }
+            System.out.println("HELLO: " + m.get("state").toString());
 
             Board.snakes.get(snake).state = m.get("state").toString();
 
