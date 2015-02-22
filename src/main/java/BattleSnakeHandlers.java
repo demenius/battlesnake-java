@@ -50,9 +50,9 @@ public class BattleSnakeHandlers
     private String foodDirection()
     {
         findFoodDistances();
-        for (int i = 0; i < Board.width; i++)
+        for (int j = 0; j < Board.height; j++)
         {
-            for (int j = 0; j < Board.height; j++)
+            for (int i = 0; i < Board.width; i++)
             {
                 System.err.print("[" + Board.distanceMap[i][j] + "]");
             }
@@ -206,8 +206,10 @@ public class BattleSnakeHandlers
 
     private void findFoodDistances()
     {
+        Board.distanceMap[ourCoords()[0]][ourCoords()[1]] = 0;
         for (int i = 0; i < Board.food.length; i++)
         {
+            System.err.println("Find Food: x: " + Board.food[i][0] + " y: " + Board.food[i][1] + " State: " + Board.board[Board.food[i][0]][Board.food[i][1]]);
             calcDist(Board.food[i][0], Board.food[i][1]);
         }
     }
