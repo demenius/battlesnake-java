@@ -213,20 +213,15 @@ public class BattleSnakeHandlers
     
     private void calcDist(int x, int y)
     {
-            System.err.println("Check x-1: for x:" + x + " y: " + y);
         calcHelper(x,y,x-1,y);
-            System.err.println("Check x+1: for x:" + x + " y: " + y);
         calcHelper(x,y,x+1,y);
-            System.err.println("Check y-1: for x:" + x + " y: " + y);
         calcHelper(x,y,x,y-1);
-            System.err.println("Check y+1: for x:" + x + " y: " + y);
         calcHelper(x,y,x,y+1);
     }
     
     private void calcHelper(int x1, int y1, int x2, int y2)
     {
         int curDist = Board.distanceMap[x1][y1];
-        System.err.println("Cur: x: " + x1 + " y: " + y1 + " Dist: " + curDist);
         
         if (validX(x2) && validY(y2) && Board.distanceMap[x2][y2] != -1)
         {
