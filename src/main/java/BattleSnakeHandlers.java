@@ -255,11 +255,11 @@ public class BattleSnakeHandlers
         }
     }
 
-    private void parseSnakes(ArrayList<Object>[] snakes)
+    private void parseSnakes(ArrayList<ArrayList<Object>> snakes)
     {
-        for (int j = 0; j < snakes.length; j++)
+        for (int j = 0; j < snakes.size(); j++)
         {
-            for(Object o : snakes[j])
+            for(Object o : snakes.get(j))
             {
                 String snake = "";
                 if(o.toString().equals("name"))
