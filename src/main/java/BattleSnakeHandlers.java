@@ -239,7 +239,7 @@ public class BattleSnakeHandlers
         Board.game_id = requestBody.get("game_id").toString();
         Board.turn = (Integer) requestBody.get("turn");
         parseBoardTiles((ArrayList<ArrayList<Object>>) requestBody.get("board"));
-        parseSnakes((Map<String, Object>[]) requestBody.get("snakes"));
+        parseSnakes((ArrayList<Object>[]) requestBody.get("snakes"));
         Board.food = (int[][]) (requestBody.get("food"));
     }
 
@@ -255,22 +255,43 @@ public class BattleSnakeHandlers
         }
     }
 
-    private void parseSnakes(Map<String, Object>[] snakes)
+    private void parseSnakes(ArrayList<Object>[] snakes)
     {
         for (int j = 0; j < snakes.length; j++)
         {
-            String snake = snakes[j].get("name").toString();
-            if (!Board.snakes.containsKey(snake))
+            for(Object o : snakes[j])
             {
-                Board.snakes.put(snake, new Snake(snake));
+                String snake = "";
+                if(o.toString().equals("name"))
+                {
+                    snake = o.toString();
+                    if (!Board.snakes.containsKey(snake))
+                    {
+                        Board.snakes.put(snake, new Snake(snake));
+                    }
+                } else if(o.toString().equals("state"))
+                {
+                    Board.snakes.get(snake).state = o.toString();
+                } else if(o.toString().equals("coords"))
+                {
+                    Board.snakes.get(snake).coords = (int[][])o;
+                } else if(o.toString().equals("score"))
+                {
+                    Board.snakes.get(snake).score = (Integer) o;
+                } else if(o.toString().equals("color"))
+                {
+                    Board.snakes.get(snake).color = (Integer) o;
+                } else if(o.toString().equals("head_url"))
+                {
+                    Board.snakes.get(snake).head_url = o.toString();
+                } else if(o.toString().equals("taunt"))
+                {
+                    Board.snakes.get(snake).taunt = o.toString();
+                }
+                
             }
+            
 
-            Board.snakes.get(snake).state = snakes[j].get("state").toString();
-            Board.snakes.get(snake).coords = (int[][]) snakes[j].get("coords");
-            Board.snakes.get(snake).score = (Integer) snakes[j].get("score");
-            Board.snakes.get(snake).color = (Integer) snakes[j].get("color");
-            Board.snakes.get(snake).head_url = snakes[j].get("head_url").toString();
-            Board.snakes.get(snake).taunt = snakes[j].get("taunt").toString();
 
         }
     }
