@@ -207,13 +207,42 @@ public class BattleSnakeHandlers
     private void findFoodDistances()
     {
         Board.distanceMap[ourCoords()[0]][ourCoords()[1]] = 0;
-        for (int i = 0; i < Board.food.length; i++)
+        calcDist(ourCoords()[0], ourCoords()[1]);
+    }
+    
+    
+    private void calcDist(int x, int y)
+    {
+            System.err.println("Check x-1: for x:" + x + " y: " + y);
+        calcHelper(x,y,x-1,y);
+            System.err.println("Check x+1: for x:" + x + " y: " + y);
+        calcHelper(x,y,x+1,y);
+            System.err.println("Check y-1: for x:" + x + " y: " + y);
+        calcHelper(x,y,x,y-1);
+            System.err.println("Check y+1: for x:" + x + " y: " + y);
+        calcHelper(x,y,x,y+1);
+    }
+    
+    private void calcHelper(int x1, int y1, int x2, int y2)
+    {
+        int curDist = Board.distanceMap[x1][y1];
+        System.err.println("Cur: x: " + x1 + " y: " + y1 + " Dist: " + curDist);
+        
+        if (validX(x2) && validY(y2) && Board.distanceMap[x2][y2] != -1)
         {
-            calcDist(Board.food[i][0], Board.food[i][1]);
+            if(Board.distanceMap[x2][y2] > curDist + 1)
+            {
+                Board.distanceMap[x2][y2] = curDist + 1;
+                calcDist(x2, y2);
+            } else if(Board.distanceMap[x2][y2] < curDist)
+            {
+                Board.distanceMap[x1][y1] = curDist+1;
+                calcDist(x1, y1);
+            }
         }
     }
 
-    private void calcDist(int x, int y)
+    private void calcDist2(int x, int y)
     {
         System.err.println("Find: x: " + x + " y: " + y);
         if (x == ourCoords()[0] && y == ourCoords()[1])
