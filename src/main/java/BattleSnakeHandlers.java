@@ -50,6 +50,14 @@ public class BattleSnakeHandlers
     private String foodDirection()
     {
         findFoodDistances();
+        for(int i = 0; i < Board.width; i++)
+        {
+            for(int j = 0; j < Board.height; j++)
+            {
+                System.err.print("[" + Board.distanceMap[i][j] + "]");
+            }
+            System.err.println();
+        }
         int[] t = findShortestFoodCoord();
         return coordToDir(shortestPath(t[0], t[1]));
     }
