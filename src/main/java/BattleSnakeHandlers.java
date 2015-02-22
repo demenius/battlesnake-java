@@ -30,6 +30,14 @@ public class BattleSnakeHandlers
         // Dummy Response
         Map<String, Object> responseObject = new HashMap<String, Object>();
         String move = getMove();
+        for (int j = 0; j < Board.height; j++)
+        {
+            for (int i = 0; i < Board.width; i++)
+            {
+                System.err.print("[" + Board.distanceMap[i][j] + "]");
+            }
+            System.err.println();
+        }
         System.err.println("Cur: " + curDir() + " Next: " + move);
         responseObject.put("move", move);
         responseObject.put("taunt", "Get Shreked");
