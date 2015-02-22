@@ -41,7 +41,7 @@ public class BattleSnakeHandlers
             responseObject.put("move", dfooddist());
         }*/
         responseObject.put("move", dfooddist());
-        responseObject.put("taunt", Arrays.toString(ourCoords()));
+        responseObject.put("taunt", dir);
         return responseObject;
     }
 
@@ -172,7 +172,7 @@ public class BattleSnakeHandlers
 
     private int[] ourCoords(int x, int y)
     {
-        int[] c = ourCoords();
+        int[] c = ourCoords().clone();
         c[0] += x;
         c[1] += y;
 
@@ -181,10 +181,6 @@ public class BattleSnakeHandlers
 
     private int[] ourCoords()
     {
-        for(int i = 0; i < ours().coords.length; i++)
-        {
-            System.err.println(Arrays.toString(ours().coords[i]));
-        }
         return ours().coords[0];
     }
 
@@ -274,7 +270,7 @@ public class BattleSnakeHandlers
         Board.turn = (Integer) requestBody.get("turn");
         parseBoardTiles((ArrayList<ArrayList<Object>>) requestBody.get("board"));
         parseSnakes((ArrayList<Map<String, Object>>) requestBody.get("snakes"));
-        Board.food = getCoords((ArrayList<ArrayList<Integer>>)requestBody.get("food"));
+        Board.food = toDoubleIntArray((ArrayList<ArrayList<Integer>>)requestBody.get("food"));
     }
 
     private void parseBoardTiles(ArrayList<ArrayList<Object>> tiles)
@@ -300,11 +296,11 @@ public class BattleSnakeHandlers
             }
             
 
-            Board.snakes.get(snake).coords = getCoords((ArrayList<ArrayList<Integer>>)m.get("coords"));
+            Board.snakes.get(snake).coords = toDoubleIntArray((ArrayList<ArrayList<Integer>>)m.get("coords"));
         }
     }
     
-    private int[][] getCoords(ArrayList<ArrayList<Integer>> t)
+    private int[][] toDoubleIntArray(ArrayList<ArrayList<Integer>> t)
     {
         int[][] c = new int[t.size()][2];
         for(int i = 0; i < t.size(); i++)
