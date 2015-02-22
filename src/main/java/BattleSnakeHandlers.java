@@ -20,7 +20,7 @@ public class BattleSnakeHandlers
         responseObject.put("name", NAME);
         responseObject.put("color", "#80F700");
         responseObject.put("head_url", "");
-        responseObject.put("taunt", ":-D");
+        responseObject.put("taunt", "Get Shreked");
         return responseObject;
     }
 
@@ -303,7 +303,7 @@ public class BattleSnakeHandlers
         return "up";
     }
 
-    private boolean safeMove2(int x, int y)
+   /* private boolean safeMove2(int x, int y)
     {
         return isSafeMove2(ourCoords(x, y));
     }
@@ -316,7 +316,7 @@ public class BattleSnakeHandlers
             return coordToTile(c).state != BoardTile.State.HEAD && coordToTile(c).state != BoardTile.State.BODY;
         }
         return false;
-    }
+    }*/
 
     private void parseStart(Map<String, Object> requestBody)
     {
@@ -324,6 +324,7 @@ public class BattleSnakeHandlers
         Board.width = (Integer) requestBody.get("width");
         Board.height = (Integer) requestBody.get("width");
         Board.board = new BoardTile[Board.width][Board.height];
+        Board.distanceMap = new int[Board.width][Board.height];
         for (int i = 0; i < Board.width; i++)
         {
             for (int j = 0; j < Board.height; j++)
@@ -404,8 +405,8 @@ public class BattleSnakeHandlers
 
         public static String game_id;
         public static int turn;
-        public static BoardTile[][] board = new BoardTile[width][height];
-        public static int[][] distanceMap = new int[width][height];
+        public static BoardTile[][] board;
+        public static int[][] distanceMap;
         public static Map<String, Snake> snakes = new HashMap<String, Snake>();
         public static int[][] food;
     }
