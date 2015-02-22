@@ -32,17 +32,15 @@ public class BattleSnakeHandlers
         String dir = curDir();
         int[] f = ourCoords();
         int[] t = getCoords(dir);
-        if (safeMove(t[0] - f[0], t[1] - f[1]))
+        if (safeMove(t))
         {
-            System.err.println("Safe");
             responseObject.put("move", dir);
         } else
         {
-            System.err.println("Other");
-            responseObject.put("move", dfooddist());
+            dir = dfooddist();
+            responseObject.put("move", dir);
         }
-        responseObject.put("move", dfooddist());
-        responseObject.put("taunt", dir + " : " + Arrays.toString(ours().coords[0]));
+        responseObject.put("taunt", dir);
         return responseObject;
     }
 
