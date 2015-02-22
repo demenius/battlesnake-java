@@ -15,10 +15,10 @@ public class BattleSnakeHandlers
         // Dummy Response
         parseStart(requestBody);
         Map<String, Object> responseObject = new HashMap<String, Object>();
-        responseObject.put("name", "Inland-Taipans");
+        responseObject.put("name", "Retro-Fire");
         responseObject.put("color", "#80F700");
-        responseObject.put("head_url", "https://img.4plebs.org/boards/s4s/image/1390/48/1390481001892.png");
-        responseObject.put("taunt", "Get Shreked");
+        responseObject.put("head_url", "");
+        responseObject.put("taunt", ":-D");
         return responseObject;
     }
 
