@@ -51,15 +51,6 @@ public class BattleSnakeHandlers
     {
         findFoodDistances();
         int[] t = findShortestFoodCoord();
-        for (int j = 0; j < Board.height; j++)
-        {
-            for (int i = 0; i < Board.width; i++)
-            {
-                System.err.print("[" + Board.distanceMap[i][j] + "]");
-            }
-            System.err.println();
-        }
-        System.err.println("Shortest: " + t[0] + ":" + t[1]);
         return coordToDir(shortestPath(t[0], t[1]));
     }
 
