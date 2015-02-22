@@ -235,7 +235,7 @@ public class BattleSnakeHandlers
 
     private boolean safeMove(int x, int y)
     {
-        if (ourCoords(x, y)[0] < 0 || ourCoords(x, y)[0] >= Board.width || ourCoords(x, y)[1] < 0 || ourCoords(x, y)[1] >= Board.height)
+        if (!(ourCoords(x, y)[0] < 0 || ourCoords(x, y)[0] >= Board.width || ourCoords(x, y)[1] < 0 || ourCoords(x, y)[1] >= Board.height))
         {
             return coordToTile(ourCoords(x, y)).state != BoardTile.State.HEAD && coordToTile(ourCoords(x, y)).state != BoardTile.State.BODY;
         }
