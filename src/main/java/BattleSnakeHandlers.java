@@ -42,7 +42,7 @@ public class BattleSnakeHandlers
             responseObject.put("move", dfooddist());
         }*/
         //responseObject.put("move", dfooddist());
-        responseObject.put("left", dfooddist());
+        responseObject.put("move", "left");
         responseObject.put("taunt", dir + " : " + Arrays.toString(ours().coords[0]));
         return responseObject;
     }
