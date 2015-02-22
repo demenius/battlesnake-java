@@ -65,11 +65,6 @@ public class BattleSnakeHandlers
 
     private String coordToDir(int[] c)
     {
-        System.err.println(Arrays.toString(c));
-        System.err.println(Arrays.toString(getNextCoords("left")));
-        System.err.println(Arrays.toString(getNextCoords("right")));
-        System.err.println(Arrays.toString(getNextCoords("up")));
-        System.err.println(Arrays.toString(getNextCoords("down")));
         if (Arrays.equals(getNextCoords("left"), c))
         {
             return "left";
@@ -82,7 +77,11 @@ public class BattleSnakeHandlers
         {
             return "up";
         }
-        return "down";
+        if (Arrays.equals(getNextCoords("down"), c))
+        {
+            return "down";
+        }
+        return curDir();
 
     }
     
@@ -143,11 +142,14 @@ public class BattleSnakeHandlers
             if(isHead(x, y-1))
                 return toIntArray(x, y);
             return shortestPath(x, y-1);
-        } else
+        } else if(x0VSy1 == 1 && x1VSy1 == 1 && y0VSy1 == 1)
         {
             if(isHead(x, y+1))
                 return toIntArray(x, y);
             return shortestPath(x, y+1);
+        } else
+        {
+            return toIntArray(-1,-1);
         }
         
 
