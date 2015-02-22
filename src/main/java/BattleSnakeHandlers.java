@@ -89,9 +89,9 @@ public class BattleSnakeHandlers
     
     private int whichOne(int x1, int y1, int x2, int y2)
     {
-        if(validX(x1) && validY(y1))
+        if(checkXY(x1,y1))
         {
-            if(checkXY(x1,y1))
+            if(checkXY(x2,y2))
             {
                 return Board.distanceMap[x1][y1] <= Board.distanceMap[x2][y2] ? 0 : 1;
             } else 
