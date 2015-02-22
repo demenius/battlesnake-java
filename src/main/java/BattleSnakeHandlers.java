@@ -213,19 +213,19 @@ public class BattleSnakeHandlers
         }
     }
 
-    private int calcDist(int x, int y)
+    private void calcDist(int x, int y)
     {
         System.err.println("Find: x: " + x + " y: " + y);
         if (x == ourCoords()[0] && y == ourCoords()[1])
         {
-            return 0;
+            return;
         }
         
         int maxDist = Board.width * Board.height;
         int bestDist = maxDist;
         
         if(Board.distanceMap[x][y] != maxDist)
-            return Board.distanceMap[x][y];
+            return;
 
         if (x - 1 >= 0 && Board.distanceMap[x - 1][y] != -1)
         {
@@ -288,7 +288,6 @@ public class BattleSnakeHandlers
         {
             Board.distanceMap[x][y] = bestDist + 1;
         }
-        return Board.distanceMap[x][y];
     }
 
     /*public boolean mvleft()
