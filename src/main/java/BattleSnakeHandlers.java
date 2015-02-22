@@ -70,15 +70,15 @@ public class BattleSnakeHandlers
         System.err.println(Arrays.toString(getNextCoords("right")));
         System.err.println(Arrays.toString(getNextCoords("up")));
         System.err.println(Arrays.toString(getNextCoords("down")));
-        if (getNextCoords("left") == c)
+        if (Arrays.equals(getNextCoords("left"), c))
         {
             return "left";
         }
-        if (getNextCoords("right") == c)
+        if (Arrays.equals(getNextCoords("right"), c))
         {
             return "right";
         }
-        if (getNextCoords("up") == c)
+        if (Arrays.equals(getNextCoords("up"), c))
         {
             return "up";
         }
