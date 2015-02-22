@@ -23,6 +23,7 @@ public class BattleSnakeHandlers
 
     public Object handleMove(Map<String, Object> requestBody)
     {
+        this.parseBoard(requestBody);
         // Dummy Response
         Map<String, Object> responseObject = new HashMap<String, Object>();
         
