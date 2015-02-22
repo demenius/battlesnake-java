@@ -88,15 +88,20 @@ public class BattleSnakeHandlers
     {
         if(validX(x1) && validY(y1))
         {
-            if(validX(x2) && validY(y2))
+            if(checkXY(x1,y1))
             {
                 return Board.distanceMap[x1][y1] < Board.distanceMap[x2][y2] ? 0 : 1;
             } else 
                 return 0;
-        } else if(validX(x2) && validY(y2))
+        } else if(checkXY(x2,y2))
             return 1;
         
         return -1;
+    }
+    
+    private boolean checkXY(int x, int y)
+    {
+        return validX(x) && validY(y) && Board.distanceMap[x][y] != -1;
     }
     
     private boolean validX(int x)
