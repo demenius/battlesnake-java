@@ -30,9 +30,24 @@ public class BattleSnakeHandlers
         // Dummy Response
         Map<String, Object> responseObject = new HashMap<String, Object>();
         String move = getMove();
+        
+        printDistanceBoard();
+        
         responseObject.put("move", move);
         responseObject.put("taunt", "Get Shreked");
         return responseObject;
+    }
+    
+    private void printDistanceBoard()
+    {
+        for(int j = 0; j < Board.height; j++)
+        {
+            for(int i = 0; i < Board.width; i++)
+            {
+                System.err.print(String.format("[%3d]", Board.distanceMap[i][j]));
+            }
+            System.err.println();
+        }
     }
 
     public Object handleEnd(Map<String, Object> requestBody)
@@ -77,37 +92,41 @@ public class BattleSnakeHandlers
         return curDir();
 
     }
-    
+
     private int whichOne(int x1, int y1, int x2, int y2)
     {
-        if(checkXY(x1,y1))
+        if (checkXY(x1, y1))
         {
-            if(checkXY(x2,y2))
+            if (checkXY(x2, y2))
             {
                 return Board.distanceMap[x1][y1] <= Board.distanceMap[x2][y2] ? 0 : 1;
-            } else 
+            } else
+            {
                 return 0;
-        } else if(checkXY(x2,y2))
+            }
+        } else if (checkXY(x2, y2))
+        {
             return 1;
-        
+        }
+
         return -1;
     }
-    
+
     private boolean checkXY(int x, int y)
     {
         return validX(x) && validY(y) && Board.distanceMap[x][y] != -1;
     }
-    
+
     private boolean validX(int x)
     {
         return (x >= 0 && x < Board.width);
     }
-    
+
     private boolean validY(int y)
     {
         return (y >= 0 && y < Board.height);
     }
-    
+
     private boolean isHead(int x, int y)
     {
         return (ourCoords()[0] == x && ourCoords()[1] == y);
@@ -119,60 +138,73 @@ public class BattleSnakeHandlers
     // Mov = 3 : y+1
     private int[] shortestPath(int x, int y, int lastMov)
     {
-        int x0VSx1 = whichOne(x-1, y, x+1, y);
-        
-        int x0VSy0 = whichOne(x-1, y, x, y-1);
-        int x0VSy1 = whichOne(x-1, y, x, y+1);
-        
-        int x1VSy0 = whichOne(x+1, y, x, y-1);
-        int x1VSy1 = whichOne(x+1, y, x, y+1);
-        
-        int y0VSy1 = whichOne(x, y-1, x, y+1);
-        
-        if(x0VSx1 == 0 && x0VSy0 == 0 && x0VSy1 == 0)
+        int x0VSx1 = whichOne(x - 1, y, x + 1, y);
+
+        int x0VSy0 = whichOne(x - 1, y, x, y - 1);
+        int x0VSy1 = whichOne(x - 1, y, x, y + 1);
+
+        int x1VSy0 = whichOne(x + 1, y, x, y - 1);
+        int x1VSy1 = whichOne(x + 1, y, x, y + 1);
+
+        int y0VSy1 = whichOne(x, y - 1, x, y + 1);
+
+        if (x0VSx1 == 0 && x0VSy0 == 0 && x0VSy1 == 0)
         {
-            if(isHead(x-1, y))
-                return toIntArray(x, y);
-            if(lastMov != 1)
-                return shortestPath(x-1, y, 0);
-            else
+            if (isHead(x - 1, y))
             {
-                x0VSx1 = whichOne(-1, -1, x+1, y);
-                x0VSy0 = whichOne(-1, -1, x, y-1);
-                x0VSy1 = whichOne(-1, -1, x, y+1);
+                return toIntArray(x, y);
+            }
+            if (lastMov != 1)
+            {
+                return shortestPath(x - 1, y, 0);
+            } else
+            {
+                x0VSx1 = whichOne(-1, -1, x + 1, y);
+                x0VSy0 = whichOne(-1, -1, x, y - 1);
+                x0VSy1 = whichOne(-1, -1, x, y + 1);
             }
         }
-        if(x0VSx1 == 1 && x1VSy0 == 0 && x1VSy1 == 0)
+        if (x0VSx1 == 1 && x1VSy0 == 0 && x1VSy1 == 0)
         {
-            if(isHead(x+1, y))
-                return toIntArray(x, y);
-            if(lastMov != 0)
-                return shortestPath(x+1, y, 1);
-            else
+            if (isHead(x + 1, y))
             {
-                x1VSy0 = whichOne(-1, -1, x, y-1);
-                x1VSy1 = whichOne(-1, -1, x, y+1);
+                return toIntArray(x, y);
+            }
+            if (lastMov != 0)
+            {
+                return shortestPath(x + 1, y, 1);
+            } else
+            {
+                x1VSy0 = whichOne(-1, -1, x, y - 1);
+                x1VSy1 = whichOne(-1, -1, x, y + 1);
             }
         }
-        if(x0VSy0 == 1 && x1VSy0 == 1 && y0VSy1 == 0)
+        if (x0VSy0 == 1 && x1VSy0 == 1 && y0VSy1 == 0)
         {
-            if(isHead(x, y-1))
-                return toIntArray(x, y);
-            if(lastMov != 3)
-                return shortestPath(x, y-1, 2);
-            else
+            if (isHead(x, y - 1))
             {
-                y0VSy1 = whichOne(-1,-1, x, y+1);
+                return toIntArray(x, y);
+            }
+            if (lastMov != 3)
+            {
+                return shortestPath(x, y - 1, 2);
+            } else
+            {
+                y0VSy1 = whichOne(-1, -1, x, y + 1);
             }
         }
-        if(x0VSy1 == 1 && x1VSy1 == 1 && y0VSy1 == 1)
+        if (x0VSy1 == 1 && x1VSy1 == 1 && y0VSy1 == 1)
         {
-            if(isHead(x, y+1))
+            if (isHead(x, y + 1))
+            {
                 return toIntArray(x, y);
-            if(lastMov != 2)
-                return shortestPath(x, y+1, 3);
+            }
+            if (lastMov != 2)
+            {
+                return shortestPath(x, y + 1, 3);
+            }
         }
-        return toIntArray(-1,-1);
+        return toIntArray(-1, -1);
     }
 
     private int[] toIntArray(int x, int y)
@@ -207,23 +239,22 @@ public class BattleSnakeHandlers
         Board.distanceMap[ourCoords()[0]][ourCoords()[1]] = 0;
         calcDist(ourCoords()[0], ourCoords()[1]);
     }
-    
-    
+
     private void calcDist(int x, int y)
     {
-        calcHelper(x,y,x-1,y);
-        calcHelper(x,y,x+1,y);
-        calcHelper(x,y,x,y-1);
-        calcHelper(x,y,x,y+1);
+        calcHelper(x, y, x - 1, y);
+        calcHelper(x, y, x + 1, y);
+        calcHelper(x, y, x, y - 1);
+        calcHelper(x, y, x, y + 1);
     }
-    
+
     private void calcHelper(int x1, int y1, int x2, int y2)
     {
         int curDist = Board.distanceMap[x1][y1];
-        
+
         if (validX(x2) && validY(y2) && Board.distanceMap[x2][y2] != -1)
         {
-            if(Board.distanceMap[x2][y2] > curDist + 1)
+            if (Board.distanceMap[x2][y2] > curDist + 1)
             {
                 Board.distanceMap[x2][y2] = curDist + 1;
                 calcDist(x2, y2);
@@ -237,12 +268,14 @@ public class BattleSnakeHandlers
         {
             return;
         }
-        
+
         int maxDist = Board.width * Board.height;
         int bestDist = maxDist;
-        
-        if(Board.distanceMap[x][y] != maxDist)
+
+        if (Board.distanceMap[x][y] != maxDist)
+        {
             return;
+        }
 
         if (x - 1 >= 0 && Board.distanceMap[x - 1][y] != -1)
         {
@@ -398,20 +431,6 @@ public class BattleSnakeHandlers
         return "up";
     }
 
-    /* private boolean safeMove2(int x, int y)
-     {
-     return isSafeMove2(ourCoords(x, y));
-     }
-
-     private boolean isSafeMove2(int[] c)
-     {
-     System.err.println("CHECK SAFE MOVE: " + c[0] + ":" + c[1]);
-     if (c[0] > 1 && c[0] < Board.width && c[1] > 1 && c[1] < Board.height)
-     {
-     return coordToTile(c).state != BoardTile.State.HEAD && coordToTile(c).state != BoardTile.State.BODY;
-     }
-     return false;
-     }*/
     private void parseStart(Map<String, Object> requestBody)
     {
         Board.game_id = requestBody.get("game_id").toString();
@@ -444,7 +463,7 @@ public class BattleSnakeHandlers
         {
             for (int j = 0; j < Board.height; j++)
             {
-                Map<String, String> q = (Map<String, String>)tiles.get(i).get(j);
+                Map<String, String> q = (Map<String, String>) tiles.get(i).get(j);
                 ((BoardTile) Board.board[i][j]).state = BoardTile.State.getState(q.get("state"));
                 if (Board.board[i][j].state == BoardTile.State.BODY || Board.board[i][j].state == BoardTile.State.HEAD)
                 {
