@@ -33,7 +33,7 @@ public class BattleSnakeHandlers
             responseObject.put("move", dir);
         else
             responseObject.put("move", dfooddist());
-        responseObject.put("taunt", "Get Shreked: " + Board.width + ":" + Board.height);
+        responseObject.put("taunt", "Get Shreked");
         return responseObject;
     }
 
