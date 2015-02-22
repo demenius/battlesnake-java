@@ -31,7 +31,7 @@ public class BattleSnakeHandlers
 
         String dir = curDir();
         System.err.println("Our Coords: " + ourCoords()[0] + ":" + ourCoords()[1]);
-        int[] t = getCoords(dir);
+        int[] t = getNextCoords(dir);
         System.err.println("Next Coords: " + t[0] + ":" + t[1]);
         if (safeMove(t))
         {
@@ -153,17 +153,17 @@ public class BattleSnakeHandlers
         return n;
     }
 
-    private int[] getCoords(String dir)
+    private int[] getNextCoords(String dir)
     {
-        if (reverseDir().equals("left"))
+        if (dir.equals("left"))
         {
             return ourCoords(-1, 0);
         }
-        if (reverseDir().equals("right"))
+        if (dir.equals("right"))
         {
             return ourCoords(1, 0);
         }
-        if (reverseDir().equals("up"))
+        if (dir.equals("up"))
         {
             return ourCoords(0, -1);
         }
@@ -242,7 +242,7 @@ public class BattleSnakeHandlers
     
     private boolean safeMove(int[] c)
     {
-        System.err.println("SAFE MOVE: " + c[0] + ":" + c[1]);
+        System.err.println("CHECK SAFE MOVE: " + c[0] + ":" + c[1]);
         if (c[0] > 1 && c[0] < Board.width && c[1] > 1 && c[1] < Board.height)
         {
             return coordToTile(c).state != BoardTile.State.HEAD && coordToTile(c).state != BoardTile.State.BODY;
