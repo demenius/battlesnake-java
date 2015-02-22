@@ -209,7 +209,7 @@ public class BattleSnakeHandlers
         Board.distanceMap[ourCoords()[0]][ourCoords()[1]] = 0;
         for (int i = 0; i < Board.food.length; i++)
         {
-            System.err.println("Find Food: x: " + Board.food[i][0] + " y: " + Board.food[i][1] + " State: " + Board.board[Board.food[i][0]][Board.food[i][1]]);
+            System.err.println("Find Food: x: " + Board.food[i][0] + " y: " + Board.food[i][1] + " State: " + Board.board[Board.food[i][0]][Board.food[i][1]].state);
             calcDist(Board.food[i][0], Board.food[i][1]);
         }
     }
@@ -465,8 +465,8 @@ public class BattleSnakeHandlers
         int[][] c = new int[t.size()][2];
         for (int i = 0; i < t.size(); i++)
         {
-            c[i][0] = t.get(i).get(0)-1;
-            c[i][1] = t.get(i).get(1)-1;
+            c[i][0] = t.get(i).get(0);
+            c[i][1] = t.get(i).get(1);
         }
         return c;
     }
