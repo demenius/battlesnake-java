@@ -126,33 +126,23 @@ public class BattleSnakeHandlers
         int coord[] = new int[2];
         for (int i = 0; i < Board.width; i++)
         {
-            for (int j = 0; j < Board.height; j++)
-            {
-                if (coordToTile(i, j).state == BoardTile.State.FOOD)
-                {
-                    if (Board.distanceMap[i][j] < shortest)
+            int x = Board.food[i][0];
+            int y = Board.food[i][1];
+                    if (Board.distanceMap[x][y] < shortest)
                     {
-                        shortest = Board.distanceMap[i][j];
-                        coord[0] = i;
-                        coord[1] = j;
+                        shortest = Board.distanceMap[x][y];
+                        coord[0] = x;
+                        coord[1] = y;
                     }
-                }
-            }
         }
         return coord;
     }
 
     private void findFoodDistances()
     {
-        for (int i = 0; i < Board.width; i++)
+        for (int i = 0; i < Board.food.length; i++)
         {
-            for (int j = 0; j < Board.height; j++)
-            {
-                if (coordToTile(i, j).state == BoardTile.State.FOOD)
-                {
-                    calcDist(i, j);
-                }
-            }
+            calcDist(Board.food[i][0], Board.food[i][1]);
         }
     }
 
@@ -213,7 +203,7 @@ public class BattleSnakeHandlers
         return Board.distanceMap[x][y];
     }
 
-    public boolean mvleft()
+    /*public boolean mvleft()
     {
         return safeMove(-1, 0);
     }
@@ -231,7 +221,7 @@ public class BattleSnakeHandlers
     public boolean mvdown()
     {
         return safeMove(0, 1);
-    }
+    }*/
 
     private int[] getNextCoords(String dir)
     {
@@ -313,12 +303,12 @@ public class BattleSnakeHandlers
         return "up";
     }
 
-    private boolean safeMove(int x, int y)
+    private boolean safeMove2(int x, int y)
     {
-        return isSafeMove(ourCoords(x, y));
+        return isSafeMove2(ourCoords(x, y));
     }
 
-    private boolean isSafeMove(int[] c)
+    private boolean isSafeMove2(int[] c)
     {
         System.err.println("CHECK SAFE MOVE: " + c[0] + ":" + c[1]);
         if (c[0] > 1 && c[0] < Board.width && c[1] > 1 && c[1] < Board.height)
