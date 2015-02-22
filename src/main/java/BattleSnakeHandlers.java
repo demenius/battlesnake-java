@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class BattleSnakeHandlers
             System.err.println("Other");
             responseObject.put("move", dfooddist());
         }
-        responseObject.put("taunt", "Get Shreked");
+        responseObject.put("taunt", Arrays.toString(ourCoords()));
         return responseObject;
     }
 
@@ -235,9 +236,14 @@ public class BattleSnakeHandlers
 
     private boolean safeMove(int x, int y)
     {
-        if (!(ourCoords(x, y)[0] < 0 || ourCoords(x, y)[0] >= Board.width || ourCoords(x, y)[1] < 0 || ourCoords(x, y)[1] >= Board.height))
+        return safeMove(ourCoords(x,y));
+    }
+    
+    private boolean safeMove(int[] c)
+    {
+        if (c[0] > 0 || c[0] < Board.width-1 || c[1] > 0 || c[1] < Board.height-1)
         {
-            return coordToTile(ourCoords(x, y)).state != BoardTile.State.HEAD && coordToTile(ourCoords(x, y)).state != BoardTile.State.BODY;
+            return coordToTile(c).state != BoardTile.State.HEAD && coordToTile(c).state != BoardTile.State.BODY;
         }
         return false;
     }
