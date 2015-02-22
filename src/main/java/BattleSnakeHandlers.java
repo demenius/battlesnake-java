@@ -285,9 +285,7 @@ public class BattleSnakeHandlers
             {
                 Board.snakes.put(snake, new Snake(snake));
             }
-            System.err.println("HELLO: " + m);
 
-            Board.snakes.get(snake).state = m.get("state").toString();
 
             Board.snakes.get(snake).coords = (int[][]) m.get("coords");
 
