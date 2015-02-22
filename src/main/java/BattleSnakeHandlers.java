@@ -10,7 +10,7 @@ import java.util.Queue;
 public class BattleSnakeHandlers
 {
 
-    public static String NAME = "Retro-Fire";
+    public static String NAME = "Inland-Taipans";
 
     public Object handleStart(Map<String, Object> requestBody)
     {
@@ -19,7 +19,7 @@ public class BattleSnakeHandlers
         Map<String, Object> responseObject = new HashMap<String, Object>();
         responseObject.put("name", NAME);
         responseObject.put("color", "#80F700");
-        responseObject.put("head_url", "");
+        responseObject.put("head_url", "https://img.4plebs.org/boards/s4s/image/1390/48/1390481001892.png");
         responseObject.put("taunt", "Get Shreked");
         return responseObject;
     }
@@ -30,15 +30,6 @@ public class BattleSnakeHandlers
         // Dummy Response
         Map<String, Object> responseObject = new HashMap<String, Object>();
         String move = getMove();
-        for (int j = 0; j < Board.height; j++)
-        {
-            for (int i = 0; i < Board.width; i++)
-            {
-                System.err.print("[" + Board.distanceMap[i][j] + "]");
-            }
-            System.err.println();
-        }
-        System.err.println("Cur: " + curDir() + " Next: " + move);
         responseObject.put("move", move);
         responseObject.put("taunt", "Get Shreked");
         return responseObject;
