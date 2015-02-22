@@ -261,7 +261,7 @@ public class BattleSnakeHandlers
         Board.turn = (Integer) requestBody.get("turn");
         parseBoardTiles((ArrayList<ArrayList<Object>>) requestBody.get("board"));
         parseSnakes((ArrayList<Map<String, Object>>) requestBody.get("snakes"));
-        Board.food = (int[][]) (requestBody.get("food"));
+        Board.food = getCoords((ArrayList<ArrayList<Integer>>)requestBody.get("food"));
     }
 
     private void parseBoardTiles(ArrayList<ArrayList<Object>> tiles)
