@@ -29,8 +29,9 @@ public class BattleSnakeHandlers
         this.parseBoard(requestBody);
         // Dummy Response
         Map<String, Object> responseObject = new HashMap<String, Object>();
-
-        responseObject.put("move", getMove());
+        String move = getMove();
+        System.err.println("Cur: " + curDir() + " Next: " + move);
+        responseObject.put("move", move);
         responseObject.put("taunt", "Get Shreked");
         return responseObject;
     }
@@ -51,15 +52,9 @@ public class BattleSnakeHandlers
     {
         findFoodDistances();
         int[] t = findShortestFoodCoord();
-        for (int j = 0; j < Board.height; j++)
-        {
-            for (int i = 0; i < Board.width; i++)
-            {
-                System.err.print("[" + Board.distanceMap[i][j] + "]");
-            }
-            System.err.println();
-        }
-        return coordToDir(shortestPath(t[0], t[1], -1));
+        int sp[] = shortestPath(t[0], t[1], -1);
+        System.err.println("Shortest X: " + sp[0] + " Y: " + sp[1]);
+        return coordToDir(sp);
     }
 
     private String coordToDir(int[] c)
