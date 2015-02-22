@@ -225,6 +225,13 @@ public class BattleSnakeHandlers
         Board.width = (Integer) requestBody.get("width");
         Board.height = (Integer) requestBody.get("width");
         Board.board = new BoardTile[Board.width][Board.height];
+        for (int i = 0; i < Board.width; i++)
+        {
+            for(int j = 0; j < Board.height; j++)
+            {
+                Board.board[i][j] = new BoardTile();
+            }
+        }
     }
 
     private void parseBoard(Map<String, Object> requestBody)
