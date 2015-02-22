@@ -9,13 +9,14 @@ import java.util.Queue;
 
 public class BattleSnakeHandlers
 {
+    public static String NAME = "Retro-Fire";
 
     public Object handleStart(Map<String, Object> requestBody)
     {
         // Dummy Response
         parseStart(requestBody);
         Map<String, Object> responseObject = new HashMap<String, Object>();
-        responseObject.put("name", "Retro-Fire");
+        responseObject.put("name", NAME);
         responseObject.put("color", "#80F700");
         responseObject.put("head_url", "");
         responseObject.put("taunt", ":-D");
@@ -40,8 +41,9 @@ public class BattleSnakeHandlers
             System.err.println("Other");
             responseObject.put("move", dfooddist());
         }*/
-        responseObject.put("move", dfooddist());
-        responseObject.put("taunt", dir);
+        //responseObject.put("move", dfooddist());
+        responseObject.put("left", dfooddist());
+        responseObject.put("taunt", dir + " : " + Arrays.toString(ours().coords[0]));
         return responseObject;
     }
 
@@ -186,7 +188,7 @@ public class BattleSnakeHandlers
 
     private Snake ours()
     {
-        return Board.snakes.get("Inland-Taipans");
+        return Board.snakes.get(NAME);
     }
 
     private BoardTile coordToTile(int[] t)
