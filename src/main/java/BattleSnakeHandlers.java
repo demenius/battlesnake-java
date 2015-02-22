@@ -168,7 +168,7 @@ public class BattleSnakeHandlers
         int maxDist = Board.width * Board.height;
         int bestDist = maxDist;
 
-        if (x - 1 > 0 && Board.distanceMap[x - 1][y] != -1)
+        if (x - 1 >= 0 && Board.distanceMap[x - 1][y] != -1)
         {
             if (Board.distanceMap[x - 1][y] == maxDist)
             {
@@ -180,7 +180,7 @@ public class BattleSnakeHandlers
             bestDist = Board.distanceMap[x - 1][y];
         }
 
-        if (x + 1 <= Board.width && Board.distanceMap[x + 1][y] != -1)
+        if (x + 1 < Board.width && Board.distanceMap[x + 1][y] != -1)
         {
             if (Board.distanceMap[x + 1][y] == maxDist)
             {
@@ -195,7 +195,7 @@ public class BattleSnakeHandlers
             }
         }
 
-        if (y - 1 > 0 && Board.distanceMap[x][y - 1] != -1)
+        if (y - 1 >= 0 && Board.distanceMap[x][y - 1] != -1)
         {
             if (Board.distanceMap[x][y - 1] == maxDist)
             {
@@ -210,7 +210,7 @@ public class BattleSnakeHandlers
             }
         }
 
-        if (y <= Board.height && Board.distanceMap[x][y + 1] != -1)
+        if (y < Board.height && Board.distanceMap[x][y + 1] != -1)
         {
             if (Board.distanceMap[x][y + 1] == maxDist)
             {
@@ -408,8 +408,8 @@ public class BattleSnakeHandlers
         int[][] c = new int[t.size()][2];
         for (int i = 0; i < t.size(); i++)
         {
-            c[i][0] = t.get(i).get(0);
-            c[i][1] = t.get(i).get(1);
+            c[i][0] = t.get(i).get(0)-1;
+            c[i][1] = t.get(i).get(1)-1;
         }
         return c;
     }
