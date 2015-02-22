@@ -118,7 +118,7 @@ public class BattleSnakeHandlers
     // Mov = 1 : x+1
     // Mov = 2 : y-1
     // Mov = 3 : y+1
-    private int[] shortestPath(int x, int y, int mov)
+    private int[] shortestPath(int x, int y, int lastMov)
     {
         int x0VSx1 = whichOne(x-1, y, x+1, y);
         
@@ -134,43 +134,43 @@ public class BattleSnakeHandlers
         {
             if(isHead(x-1, y))
                 return toIntArray(x, y);
-            if(mov != 1)
+            if(lastMov != 1)
                 return shortestPath(x-1, y, 0);
             else
             {
-                x0VSx1 = 1;
-                x0VSy0 = 1;
-                x0VSy1 = 1;
+                x0VSx1 = whichOne(-1, -1, x+1, y);
+                x0VSy0 = whichOne(-1, -1, x, y-1);
+                x0VSy1 = whichOne(-1, -1, x, y+1);
             }
         }
         if(x0VSx1 == 1 && x1VSy0 == 0 && x1VSy1 == 0)
         {
             if(isHead(x+1, y))
                 return toIntArray(x, y);
-            if(mov != 0)
+            if(lastMov != 0)
                 return shortestPath(x+1, y, 1);
             else
             {
-                x1VSy0 = 1;
-                x1VSy1 = 1;
+                x1VSy0 = whichOne(-1, -1, x, y-1);
+                x1VSy1 = whichOne(-1, -1, x, y+1);
             }
         }
         if(x0VSy0 == 1 && x1VSy0 == 1 && y0VSy1 == 0)
         {
             if(isHead(x, y-1))
                 return toIntArray(x, y);
-            if(mov != 3)
+            if(lastMov != 3)
                 return shortestPath(x, y-1, 2);
             else
             {
-                y0VSy1 = 0;
+                y0VSy1 = whichOne(-1,-1, x, y+1);
             }
         }
         if(x0VSy1 == 1 && x1VSy1 == 1 && y0VSy1 == 1)
         {
             if(isHead(x, y+1))
                 return toIntArray(x, y);
-            if(mov != 2)
+            if(lastMov != 2)
                 return shortestPath(x, y+1, 3);
         }
         return toIntArray(-1,-1);
