@@ -124,7 +124,7 @@ public class BattleSnakeHandlers
     {
         int shortest = Board.width * Board.height;
         int coord[] = new int[2];
-        for (int i = 0; i < Board.width; i++)
+        for (int i = 0; i < Board.food.length; i++)
         {
             int x = Board.food[i][0];
             int y = Board.food[i][1];
@@ -148,6 +148,10 @@ public class BattleSnakeHandlers
 
     private int calcDist(int x, int y)
     {
+        if(x == ourCoords()[0] && y == ourCoords()[1])
+            return 0;
+        
+        
         int maxDist = Board.width * Board.height;
         int bestDist = maxDist;
 
@@ -351,6 +355,10 @@ public class BattleSnakeHandlers
             for (int j = 0; j < Board.height; j++)
             {
                 ((BoardTile) Board.board[i][j]).state = BoardTile.State.getState(tiles.get(i).get(j).toString());
+                if(Board.board[i][j].state == BoardTile.State.BODY || Board.board[i][j].state == BoardTile.State.HEAD)
+                    Board.distanceMap[i][j] = -1;
+                else
+                    Board.distanceMap[i][j] = Board.width * Board.height;
             }
         }
     }
