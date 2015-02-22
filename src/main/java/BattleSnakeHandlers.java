@@ -243,7 +243,7 @@ public class BattleSnakeHandlers
     private boolean safeMove(int[] c)
     {
         System.err.println("SAFE MOVE: " + c[0] + ":" + c[1]);
-        if (c[0] > 1 || c[0] < Board.width || c[1] > 1 || c[1] < Board.height)
+        if (c[0] > 1 && c[0] < Board.width && c[1] > 1 && c[1] < Board.height)
         {
             return coordToTile(c).state != BoardTile.State.HEAD && coordToTile(c).state != BoardTile.State.BODY;
         }
