@@ -205,15 +205,15 @@ public class BattleSnakeHandlers
 
     private String reverseDir()
     {
-        if (ours().coords[0][0] < ours().coords[1][0])
+        if (ours().coords[0][0] > ours().coords[1][0])
         {
             return "left";
         }
-        if (ours().coords[0][0] > ours().coords[1][0])
+        if (ours().coords[0][0] < ours().coords[1][0])
         {
             return "right";
         }
-        if (ours().coords[0][1] < ours().coords[1][1])
+        if (ours().coords[0][1] > ours().coords[1][1])
         {
             return "up";
         }
@@ -244,7 +244,7 @@ public class BattleSnakeHandlers
     
     private boolean safeMove(int[] c)
     {
-        if (c[0] > 0 || c[0] < Board.width-1 || c[1] > 0 || c[1] < Board.height-1)
+        if (c[0] > 1 || c[0] < Board.width || c[1] > 1 || c[1] < Board.height)
         {
             return coordToTile(c).state != BoardTile.State.HEAD && coordToTile(c).state != BoardTile.State.BODY;
         }
