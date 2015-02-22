@@ -51,6 +51,14 @@ public class BattleSnakeHandlers
     {
         findFoodDistances();
         int[] t = findShortestFoodCoord();
+        for (int j = 0; j < Board.height; j++)
+        {
+            for (int i = 0; i < Board.width; i++)
+            {
+                System.err.print("[" + Board.distanceMap[i][j] + "]");
+            }
+            System.err.println();
+        }
         return coordToDir(shortestPath(t[0], t[1]));
     }
 
@@ -108,6 +116,7 @@ public class BattleSnakeHandlers
 
     private int[] shortestPath(int x, int y)
     {
+        System.err.println("X: " + x + " Y: " + y);
         int x0VSx1 = whichOne(x-1, y, x+1, y);
         
         int x0VSy0 = whichOne(x-1, y, x, y-1);
