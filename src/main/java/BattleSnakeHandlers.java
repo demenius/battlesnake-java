@@ -114,7 +114,7 @@ public class BattleSnakeHandlers
 
     private boolean checkXY(int x, int y)
     {
-        return validX(x) && validY(y) && Board.distanceMap[x][y] != -1;
+        return validX(x) && validY(y) && Board.distanceMap[x][y] != -1 && Board.distanceMap[x][y] != (Board.width * Board.height);
     }
 
     private boolean validX(int x)
