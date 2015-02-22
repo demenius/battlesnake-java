@@ -287,7 +287,7 @@ public class BattleSnakeHandlers
             }
 
 
-            Board.snakes.get(snake).coords = getCoords((ArrayList<int[]>)m.get("coords"));
+            Board.snakes.get(snake).coords = getCoords((ArrayList<ArrayList<Integer>>)m.get("coords"));
 
             Board.snakes.get(snake).score = (Integer) m.get("score");
 
@@ -299,13 +299,13 @@ public class BattleSnakeHandlers
         }
     }
     
-    private int[][] getCoords(ArrayList<int[]> t)
+    private int[][] getCoords(ArrayList<ArrayList<Integer>> t)
     {
         int[][] c = new int[t.size()][2];
         for(int i = 0; i < t.size(); i++)
         {
-            c[i][0] = t.get(i)[0];
-            c[i][1] = t.get(i)[1];
+            c[i][0] = t.get(i).get(0);
+            c[i][1] = t.get(i).get(1);
         }
         return c;
     }
