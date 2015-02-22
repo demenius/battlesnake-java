@@ -59,7 +59,8 @@ public class BattleSnakeHandlers
             System.err.println();
         }
         int[] t = findShortestFoodCoord();
-        return coordToDir(shortestPath(t[0], t[1]));
+        return "down";
+        //return coordToDir(shortestPath(t[0], t[1]));
     }
 
     private String coordToDir(int[] c)
@@ -430,10 +431,8 @@ public class BattleSnakeHandlers
         {
             for (int j = 0; j < Board.height; j++)
             {
-                System.err.println(tiles.get(i).get(j).toString());
                 Map<String, String> q = (Map<String, String>)tiles.get(i).get(j);
                 ((BoardTile) Board.board[i][j]).state = BoardTile.State.getState(q.get("state"));
-                System.err.println("I: " + i + " J: " + j + " : State: " + Board.board[i][j].state);
                 if (Board.board[i][j].state == BoardTile.State.BODY || Board.board[i][j].state == BoardTile.State.HEAD)
                 {
                     Board.distanceMap[i][j] = -1;
