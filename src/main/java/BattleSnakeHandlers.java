@@ -131,22 +131,22 @@ public class BattleSnakeHandlers
         if(x0VSx1 == 0 && x0VSy0 == 0 && x0VSy1 == 0)
         {
             if(isHead(x-1, y))
-                return toIntArray(x-1, y);
+                return toIntArray(x, y);
             return shortestPath(x-1, y);
         } else if(x0VSx1 == 1 && x1VSy0 == 0 && x1VSy1 == 0)
         {
             if(isHead(x+1, y))
-                return toIntArray(x+1, y);
+                return toIntArray(x, y);
             return shortestPath(x+1, y);
         } else if(x0VSy0 == 1 && x1VSy0 == 1 && y0VSy1 == 0)
         {
             if(isHead(x, y-1))
-                return toIntArray(x, y-1);
+                return toIntArray(x, y);
             return shortestPath(x, y-1);
         } else
         {
             if(isHead(x, y+1))
-                return toIntArray(x, y+1);
+                return toIntArray(x, y);
             return shortestPath(x, y+1);
         }
         
