@@ -26,14 +26,17 @@ public class BattleSnakeHandlers
         this.parseBoard(requestBody);
         // Dummy Response
         Map<String, Object> responseObject = new HashMap<String, Object>();
-        
+
         String dir = curDir();
         int[] f = ourCoords();
         int[] t = getCoords(dir);
-        if(safeMove(t[0]-f[0], t[1]-f[1]))
+        if (safeMove(t[0] - f[0], t[1] - f[1]))
+        {
             responseObject.put("move", dir);
-        else
+        } else
+        {
             responseObject.put("move", dfooddist());
+        }
         responseObject.put("taunt", "Get Shreked");
         return responseObject;
     }
@@ -96,22 +99,22 @@ public class BattleSnakeHandlers
         int dist = 0;
         if (mvleft())
         {
-            q.add(ourCoords(-1,0));
+            q.add(ourCoords(-1, 0));
             return "left";
         }
         if (mvup())
         {
-            q.add(ourCoords(0,-1));
+            q.add(ourCoords(0, -1));
             return "up";
         }
         if (mvright())
         {
-            q.add(ourCoords(1,0));
+            q.add(ourCoords(1, 0));
             return "right";
         }
         if (mvdown())
         {
-            q.add(ourCoords(0,1));
+            q.add(ourCoords(0, 1));
             return "down";
         }
         return null;
@@ -124,17 +127,17 @@ public class BattleSnakeHandlers
 
     public boolean mvup()
     {
-        return safeMove(0,-1);
+        return safeMove(0, -1);
     }
 
     public boolean mvright()
     {
-        return safeMove(1,0);
+        return safeMove(1, 0);
     }
 
     public boolean mvdown()
     {
-        return safeMove(0,1);
+        return safeMove(0, 1);
     }
 
     public int absval(int n)
@@ -145,80 +148,98 @@ public class BattleSnakeHandlers
         }
         return n;
     }
-    
+
     private int[] getCoords(String dir)
     {
-        if(reverseDir().equals("left"))
+        if (reverseDir().equals("left"))
+        {
             return ourCoords(-1, 0);
-        if(reverseDir().equals("right"))
+        }
+        if (reverseDir().equals("right"))
+        {
             return ourCoords(1, 0);
-        if(reverseDir().equals("up"))
+        }
+        if (reverseDir().equals("up"))
+        {
             return ourCoords(0, -1);
+        }
         return ourCoords(0, 1);
     }
-    
+
     private int[] ourCoords(int x, int y)
     {
         int[] c = ourCoords();
         c[0] += x;
         c[1] += y;
-        
+
         return c;
     }
-    
+
     private int[] ourCoords()
     {
         return ours().coords[0];
     }
-    
+
     private Snake ours()
     {
         return Board.snakes.get("Inland-Taipans");
     }
-    
+
     private BoardTile coordToTile(int[] t)
     {
         return Board.board[t[0]][t[1]];
     }
-    
+
     private String checkShute()
     {
         String dir = "up";
-        
-        
-        
+
         return dir;
     }
-    
+
     private String reverseDir()
     {
-        if(ours().coords[0][0] < ours().coords[1][0])
+        if (ours().coords[0][0] < ours().coords[1][0])
+        {
             return "left";
-        if(ours().coords[0][0] > ours().coords[1][0])
+        }
+        if (ours().coords[0][0] > ours().coords[1][0])
+        {
             return "right";
-        if(ours().coords[0][1] < ours().coords[1][1])
+        }
+        if (ours().coords[0][1] < ours().coords[1][1])
+        {
             return "up";
+        }
         return "down";
     }
-    
+
     private String curDir()
     {
-        if(reverseDir().equals("left"))
+        if (reverseDir().equals("left"))
+        {
             return "right";
-        if(reverseDir().equals("right"))
+        }
+        if (reverseDir().equals("right"))
+        {
             return "left";
-        if(reverseDir().equals("up"))
+        }
+        if (reverseDir().equals("up"))
+        {
             return "down";
+        }
         return "up";
     }
 
     private boolean safeMove(int x, int y)
     {
-        if(ourCoords(x,y)[0] < 0 || ourCoords(x,y)[0] >= Board.width || ourCoords(x,y)[1] < 0 || ourCoords(x,y)[1] >= Board.height)
-            return coordToTile(ourCoords(x,y)).state != BoardTile.State.HEAD && coordToTile(ourCoords(x,y)).state != BoardTile.State.BODY;
+        if (ourCoords(x, y)[0] < 0 || ourCoords(x, y)[0] >= Board.width || ourCoords(x, y)[1] < 0 || ourCoords(x, y)[1] >= Board.height)
+        {
+            return coordToTile(ourCoords(x, y)).state != BoardTile.State.HEAD && coordToTile(ourCoords(x, y)).state != BoardTile.State.BODY;
+        }
         return false;
     }
-    
+
     private void parseStart(Map<String, Object> requestBody)
     {
         Board.game_id = requestBody.get("game_id").toString();
@@ -227,7 +248,7 @@ public class BattleSnakeHandlers
         Board.board = new BoardTile[Board.width][Board.height];
         for (int i = 0; i < Board.width; i++)
         {
-            for(int j = 0; j < Board.height; j++)
+            for (int j = 0; j < Board.height; j++)
             {
                 Board.board[i][j] = new BoardTile();
             }
@@ -239,60 +260,43 @@ public class BattleSnakeHandlers
         Board.game_id = requestBody.get("game_id").toString();
         Board.turn = (Integer) requestBody.get("turn");
         parseBoardTiles((ArrayList<ArrayList<Object>>) requestBody.get("board"));
-        parseSnakes((ArrayList<ArrayList<Object>>) requestBody.get("snakes"));
+        parseSnakes((ArrayList<Map<String, Object>>) requestBody.get("snakes"));
         Board.food = (int[][]) (requestBody.get("food"));
     }
 
     private void parseBoardTiles(ArrayList<ArrayList<Object>> tiles)
     {
-        
+
         for (int i = 0; i < Board.width; i++)
         {
-            for(int j = 0; j < Board.height; j++)
+            for (int j = 0; j < Board.height; j++)
             {
                 ((BoardTile) Board.board[i][j]).state = BoardTile.State.getState(tiles.get(i).get(j).toString());
             }
         }
     }
 
-    private void parseSnakes(ArrayList<ArrayList<Object>> snakes)
+    private void parseSnakes(ArrayList<Map<String, Object>> snakes)
     {
-        for (int j = 0; j < snakes.size(); j++)
+        for (Map<String, Object> m : snakes)
         {
-            for(Object o : snakes.get(j))
+            String snake = m.get("name").toString();
+            if (!Board.snakes.containsKey(snake))
             {
-                String snake = "";
-                if(o.toString().equals("name"))
-                {
-                    snake = o.toString();
-                    if (!Board.snakes.containsKey(snake))
-                    {
-                        Board.snakes.put(snake, new Snake(snake));
-                    }
-                } else if(o.toString().equals("state"))
-                {
-                    Board.snakes.get(snake).state = o.toString();
-                } else if(o.toString().equals("coords"))
-                {
-                    Board.snakes.get(snake).coords = (int[][])o;
-                } else if(o.toString().equals("score"))
-                {
-                    Board.snakes.get(snake).score = (Integer) o;
-                } else if(o.toString().equals("color"))
-                {
-                    Board.snakes.get(snake).color = (Integer) o;
-                } else if(o.toString().equals("head_url"))
-                {
-                    Board.snakes.get(snake).head_url = o.toString();
-                } else if(o.toString().equals("taunt"))
-                {
-                    Board.snakes.get(snake).taunt = o.toString();
-                }
-                
+                Board.snakes.put(snake, new Snake(snake));
             }
-            
 
+            Board.snakes.get(snake).state = m.get("state").toString();
 
+            Board.snakes.get(snake).coords = (int[][]) m.get("coords");
+
+            Board.snakes.get(snake).score = (Integer) m.get("score");
+
+            Board.snakes.get(snake).color = (Integer) m.get("color");
+
+            Board.snakes.get(snake).head_url = m.get("hear_url").toString();
+
+            Board.snakes.get(snake).taunt = m.get("taunt").toString();
         }
     }
 
