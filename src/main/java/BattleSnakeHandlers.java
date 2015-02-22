@@ -266,11 +266,14 @@ public class BattleSnakeHandlers
 
     private void parseBoard(Map<String, Object> requestBody)
     {
+        System.err.println("Parse Board");
         Board.game_id = requestBody.get("game_id").toString();
         Board.turn = (Integer) requestBody.get("turn");
         parseBoardTiles((ArrayList<ArrayList<Object>>) requestBody.get("board"));
         parseSnakes((ArrayList<Map<String, Object>>) requestBody.get("snakes"));
         Board.food = getCoords((ArrayList<ArrayList<Integer>>)requestBody.get("food"));
+        
+        System.err.println("Our Coords: " + Arrays.toString(ours().coords));
     }
 
     private void parseBoardTiles(ArrayList<ArrayList<Object>> tiles)
