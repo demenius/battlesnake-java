@@ -231,7 +231,7 @@ public class BattleSnakeHandlers
                 calcDist(x2, y2);
             } else if(Board.distanceMap[x2][y2] < curDist)
             {
-                Board.distanceMap[x1][y1] = curDist+1;
+                Board.distanceMap[x1][y1] = Board.distanceMap[x2][y2]+1;
                 calcDist(x1, y1);
             }
         }
