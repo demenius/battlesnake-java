@@ -32,14 +32,14 @@ public class BattleSnakeHandlers
         Map<String, Object> responseObject = new HashMap<String, Object>();
         String move = getMove();
         
-       // printDistanceBoard();
+       // printDistanceMap();
         
         responseObject.put("move", move);
         responseObject.put("taunt", "Get Shreked");
         return responseObject;
     }
     
-    private void printDistanceBoard(String msg)
+    private void printDistanceMap(String msg)
     {
         System.err.println(msg);
         for(int j = 0; j < Board.height; j++)
@@ -80,25 +80,25 @@ public class BattleSnakeHandlers
         if(!reverseDir().equals("left"))
         {
             calculateShortestDistanceMap(ourNextCoords("left"), true);
-            printDistanceBoard("-----------------Left Move Map-----------------");
+            printDistanceMap("-----------------Left Move Map-----------------");
             leftValid = getValidMoves();
         }
         if(!reverseDir().equals("right"))
         {
             calculateShortestDistanceMap(ourNextCoords("right"), true);
-            printDistanceBoard("-----------------Right Move Map-----------------");
+            printDistanceMap("-----------------Right Move Map-----------------");
             rightValid = getValidMoves();
         }
         if(!reverseDir().equals("up"))
         {
             calculateShortestDistanceMap(ourNextCoords("up"), true);
-            printDistanceBoard("-----------------Up Move Map-----------------");
+            printDistanceMap("-----------------Up Move Map-----------------");
             upValid = getValidMoves();
         }
         if(!reverseDir().equals("down"))
         {
             calculateShortestDistanceMap(ourNextCoords("down"), true);
-            printDistanceBoard("-----------------Down Move Map-----------------");
+            printDistanceMap("-----------------Down Move Map-----------------");
             downValid = getValidMoves();
         }
         
@@ -396,6 +396,7 @@ public class BattleSnakeHandlers
     private void calculateShortestDistanceMap(int[] head, boolean removeTail)
     {
         resetDistanceMap();
+        printDistanceMap("----------------Map Reset------------------");
         if(!validX(head[0]) || !validY(head[1]))
             return;
         Board.distanceMap[head[0]][head[1]] = 0;
