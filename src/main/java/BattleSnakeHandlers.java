@@ -79,15 +79,18 @@ public class BattleSnakeHandlers
         {
             calculateShortestDistanceMap(ourNextCoords("left"), true);
             leftValid = getValidMoves();
-        } else if(!reverseDir().equals("right"))
+        }
+        if(!reverseDir().equals("right"))
         {
             calculateShortestDistanceMap(ourNextCoords("right"), true);
             rightValid = getValidMoves();
-        } else if(!reverseDir().equals("up"))
+        }
+        if(!reverseDir().equals("up"))
         {
             calculateShortestDistanceMap(ourNextCoords("up"), true);
             upValid = getValidMoves();
-        } else
+        }
+        if(!reverseDir().equals("down"))
         {
             calculateShortestDistanceMap(ourNextCoords("down"), true);
             downValid = getValidMoves();
