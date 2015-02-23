@@ -275,6 +275,7 @@ public class BattleSnakeHandlers
     
     private void calculateLongestDistanceMap()
     {
+        this.resetDistanceMap();
         Board.distanceMap[ourCoords()[0]][ourCoords()[1]] = 0;
         calcLongDist(ourCoords()[0], ourCoords()[1]);
     }
