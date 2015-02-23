@@ -396,7 +396,6 @@ public class BattleSnakeHandlers
     private void calculateShortestDistanceMap(int[] head, boolean removeTail)
     {
         resetDistanceMap();
-        printDistanceMap("----------------Map Reset------------------");
         if(!validX(head[0]) || !validY(head[1]))
             return;
         Board.distanceMap[head[0]][head[1]] = 0;
@@ -405,7 +404,7 @@ public class BattleSnakeHandlers
             int[] tail = ours().coords[ours().coords.length-1];
             Board.distanceMap[tail[0]][tail[1]] = Board.width * Board.height;
         }
-        calcShortDist(ourCoords()[0], ourCoords()[1]);
+        calcShortDist(head[0], head[1]);
     }
 
     
