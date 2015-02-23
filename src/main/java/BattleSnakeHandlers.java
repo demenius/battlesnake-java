@@ -39,8 +39,9 @@ public class BattleSnakeHandlers
         return responseObject;
     }
     
-    private void printDistanceBoard()
+    private void printDistanceBoard(String msg)
     {
+        System.err.println(msg);
         for(int j = 0; j < Board.height; j++)
         {
             for(int i = 0; i < Board.width; i++)
@@ -61,6 +62,7 @@ public class BattleSnakeHandlers
     private String getMove()
     {
         narrowValidMoves();
+        calculateShortestDistanceMap();
         
         return foodDirection();
     }
@@ -78,21 +80,25 @@ public class BattleSnakeHandlers
         if(!reverseDir().equals("left"))
         {
             calculateShortestDistanceMap(ourNextCoords("left"), true);
+            printDistanceBoard("-----------------Left Move Map-----------------");
             leftValid = getValidMoves();
         }
         if(!reverseDir().equals("right"))
         {
             calculateShortestDistanceMap(ourNextCoords("right"), true);
+            printDistanceBoard("-----------------Right Move Map-----------------");
             rightValid = getValidMoves();
         }
         if(!reverseDir().equals("up"))
         {
             calculateShortestDistanceMap(ourNextCoords("up"), true);
+            printDistanceBoard("-----------------Up Move Map-----------------");
             upValid = getValidMoves();
         }
         if(!reverseDir().equals("down"))
         {
             calculateShortestDistanceMap(ourNextCoords("down"), true);
+            printDistanceBoard("-----------------Down Move Map-----------------");
             downValid = getValidMoves();
         }
         
@@ -141,7 +147,6 @@ public class BattleSnakeHandlers
     private int getMaxValidMoves()
     {
         int valid = 0;
-        int max = Board.width * Board.height;
         for(int i = 0; i < Board.distanceMap.length; i++)
         {
             for(int j = 0; j < Board.distanceMap[0].length; j++)
