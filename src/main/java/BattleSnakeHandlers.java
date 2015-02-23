@@ -552,7 +552,7 @@ public class BattleSnakeHandlers
         {
             for (int j = 0; j < Board.height; j++)
             {
-                if (Board.board[i][j].state == BoardTile.State.BODY || Board.board[i][j].state == BoardTile.State.HEAD || Board.invalidCoords.contains(toIntArray(i, j)))
+                if (Board.board[i][j].state == BoardTile.State.BODY || Board.board[i][j].state == BoardTile.State.HEAD || isInvalid(i, j))
                 {
                     Board.distanceMap[i][j] = -1;
                 } else
@@ -561,6 +561,14 @@ public class BattleSnakeHandlers
                 }
             }
         }
+    }
+    
+    private static boolean isInvalid(int x, int y)
+    {
+        for(int[] t : Board.invalidCoords)
+            if(t[0] == x && t[1] == y)
+                return true;
+        return false;
     }
 
     private void parseSnakes(ArrayList<Map<String, Object>> snakes)
