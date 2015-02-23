@@ -80,32 +80,27 @@ public class BattleSnakeHandlers
         if(!reverseDir().equals("left"))
         {
             calculateShortestDistanceMap(ourNextCoords("left"), true);
-            printDistanceMap("-----------------Left Move Map-----------------");
             leftValid = getValidMoves();
         }
         if(!reverseDir().equals("right"))
         {
             calculateShortestDistanceMap(ourNextCoords("right"), true);
-            printDistanceMap("-----------------Right Move Map-----------------");
             rightValid = getValidMoves();
         }
         if(!reverseDir().equals("up"))
         {
             calculateShortestDistanceMap(ourNextCoords("up"), true);
-            printDistanceMap("-----------------Up Move Map-----------------");
             upValid = getValidMoves();
         }
         if(!reverseDir().equals("down"))
         {
             calculateShortestDistanceMap(ourNextCoords("down"), true);
-            printDistanceMap("-----------------Down Move Map-----------------");
             downValid = getValidMoves();
         }
         
         calculateShortestDistanceMap();
         
         double maxValid = getMaxValidMoves() * MAX_VALID_CUTOFF;
-        System.err.println("M: " + maxValid + " L: " + leftValid + " R: " + rightValid + " U: " + upValid + " D: " + downValid);
         
         if(leftValid < maxValid && rightValid < maxValid && upValid < maxValid && downValid < maxValid)
         {
