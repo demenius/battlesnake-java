@@ -61,7 +61,6 @@ public class BattleSnakeHandlers
     private String getMove()
     {
         narrowValidMoves();
-        calculateShortestDistanceMap();
         
         return foodDirection();
     }
@@ -94,7 +93,15 @@ public class BattleSnakeHandlers
             downValid = getValidMoves();
         }
         
+        calculateShortestDistanceMap();
+        
         double maxValid = getMaxValidMoves() * MAX_VALID_CUTOFF;
+        
+        if(leftValid < maxValid && rightValid < maxValid && upValid < maxValid && downValid < maxValid)
+        {
+            maxValid = Math.max(leftValid, Math.max(rightValid, Math.max(upValid, downValid)));
+        }
+        
         if(leftValid < maxValid)
             Board.invalidCoords.add(ourNextCoords("left"));
         if(rightValid < maxValid)
@@ -103,6 +110,8 @@ public class BattleSnakeHandlers
             Board.invalidCoords.add(ourNextCoords("up"));
         if(downValid < maxValid)
             Board.invalidCoords.add(ourNextCoords("down"));
+        
+        
     }
     
     /**
@@ -379,6 +388,8 @@ public class BattleSnakeHandlers
     private void calculateShortestDistanceMap(int[] head, boolean removeTail)
     {
         resetDistanceMap();
+        if(!validX(head[0]) || !validY(head[1]))
+            return;
         Board.distanceMap[head[0]][head[1]] = 0;
         if(removeTail)
         {
