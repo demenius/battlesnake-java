@@ -134,7 +134,7 @@ public class BattleSnakeHandlers
         {
             for(int j = 0; j < Board.distanceMap[0].length; j++)
             {
-                if(Board.distanceMap[i][j] != -1 || Board.distanceMap[i][j] != max)
+                if(Board.distanceMap[i][j] != -1 && Board.distanceMap[i][j] != max)
                     valid++;
             }
         }
