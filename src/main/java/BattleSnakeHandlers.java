@@ -59,16 +59,27 @@ public class BattleSnakeHandlers
 
     private String getMove()
     {
+        calculateShortestDistanceMap();
         return foodDirection();
     }
 
     private String foodDirection()
     {
-        findFoodDistances();
         int[] t = findShortestFoodCoord();
         int sp[] = shortestPath(t[0], t[1], -1);
         System.err.println("Shortest X: " + sp[0] + " Y: " + sp[1]);
+        if(sp[0] == -1 && sp[1] == -1) // No Path Available To Food
+        {
+            return stall();
+        }
         return coordToDir(sp);
+    }
+    
+    private String stall()
+    {
+        calculateLongestDistanceMap();
+        
+        return curDir();
     }
 
     private String coordToDir(int[] c)
@@ -234,21 +245,21 @@ public class BattleSnakeHandlers
         return coord;
     }
 
-    private void findFoodDistances()
+    private void calculateShortestDistanceMap()
     {
         Board.distanceMap[ourCoords()[0]][ourCoords()[1]] = 0;
-        calcDist(ourCoords()[0], ourCoords()[1]);
+        calcShortDist(ourCoords()[0], ourCoords()[1]);
     }
 
-    private void calcDist(int x, int y)
+    private void calcShortDist(int x, int y)
     {
-        calcHelper(x, y, x - 1, y);
-        calcHelper(x, y, x + 1, y);
-        calcHelper(x, y, x, y - 1);
-        calcHelper(x, y, x, y + 1);
+        calcShortHelper(x, y, x - 1, y);
+        calcShortHelper(x, y, x + 1, y);
+        calcShortHelper(x, y, x, y - 1);
+        calcShortHelper(x, y, x, y + 1);
     }
 
-    private void calcHelper(int x1, int y1, int x2, int y2)
+    private void calcShortHelper(int x1, int y1, int x2, int y2)
     {
         int curDist = Board.distanceMap[x1][y1];
 
@@ -257,100 +268,39 @@ public class BattleSnakeHandlers
             if (Board.distanceMap[x2][y2] > curDist + 1)
             {
                 Board.distanceMap[x2][y2] = curDist + 1;
-                calcDist(x2, y2);
+                calcShortDist(x2, y2);
             }
         }
     }
-
-    private void calcDist2(int x, int y)
+    
+    private void calculateLongestDistanceMap()
     {
-        if (x == ourCoords()[0] && y == ourCoords()[1])
-        {
-            return;
-        }
+        Board.distanceMap[ourCoords()[0]][ourCoords()[1]] = 0;
+        calcLongDist(ourCoords()[0], ourCoords()[1]);
+    }
+    
+    private void calcLongDist(int x, int y)
+    {
+        calcLongHelper(x, y, x - 1, y);
+        calcLongHelper(x, y, x + 1, y);
+        calcLongHelper(x, y, x, y - 1);
+        calcLongHelper(x, y, x, y + 1);
+    }
 
-        int maxDist = Board.width * Board.height;
-        int bestDist = maxDist;
+    private void calcLongHelper(int x1, int y1, int x2, int y2)
+    {
+        int curDist = Board.distanceMap[x1][y1];
 
-        if (Board.distanceMap[x][y] != maxDist)
+        if (validX(x2) && validY(y2) && Board.distanceMap[x2][y2] != -1)
         {
-            return;
-        }
-
-        if (x - 1 >= 0 && Board.distanceMap[x - 1][y] != -1)
-        {
-            if (Board.distanceMap[x - 1][y] == maxDist)
+            if(Board.distanceMap[x2][y2] == Board.width * Board.height)
             {
-                Board.distanceMap[x][y] = -1;
-                calcDist(x - 1, y);
+                Board.distanceMap[x2][y2] = curDist + 1;
+                calcLongDist(x2, y2);
             }
-            bestDist = Board.distanceMap[x - 1][y];
-        }
-
-        if (x + 1 < Board.width && Board.distanceMap[x + 1][y] != -1)
-        {
-            if (Board.distanceMap[x + 1][y] == maxDist)
-            {
-                Board.distanceMap[x][y] = -1;
-                calcDist(x + 1, y);
-            }
-            if (Board.distanceMap[x + 1][y] < bestDist)
-            {
-                bestDist = Board.distanceMap[x + 1][y];
-            }
-        }
-
-        if (y - 1 >= 0 && Board.distanceMap[x][y - 1] != -1)
-        {
-            if (Board.distanceMap[x][y - 1] == maxDist)
-            {
-                Board.distanceMap[x][y] = -1;
-                calcDist(x, y - 1);
-            }
-            if (Board.distanceMap[x][y - 1] < bestDist)
-            {
-                bestDist = Board.distanceMap[x][y - 1];
-            }
-        }
-
-        if (y + 1 < Board.height && Board.distanceMap[x][y + 1] != -1)
-        {
-            if (Board.distanceMap[x][y + 1] == maxDist)
-            {
-                Board.distanceMap[x][y] = -1;
-                calcDist(x, y + 1);
-            }
-            if (Board.distanceMap[x][y + 1] < bestDist)
-            {
-                bestDist = Board.distanceMap[x][y + 1];
-            }
-        }
-
-        if (bestDist + 1 < Board.distanceMap[x][y])
-        {
-            Board.distanceMap[x][y] = bestDist + 1;
         }
     }
 
-    /*public boolean mvleft()
-     {
-     return safeMove(-1, 0);
-     }
-
-     public boolean mvup()
-     {
-     return safeMove(0, -1);
-     }
-
-     public boolean mvright()
-     {
-     return safeMove(1, 0);
-     }
-
-     public boolean mvdown()
-     {
-     return safeMove(0, 1);
-     }*/
     private int[] getNextCoords(String dir)
     {
         if (dir.equals("left"))
@@ -465,6 +415,24 @@ public class BattleSnakeHandlers
             {
                 Map<String, String> q = (Map<String, String>) tiles.get(i).get(j);
                 ((BoardTile) Board.board[i][j]).state = BoardTile.State.getState(q.get("state"));
+                if (Board.board[i][j].state == BoardTile.State.BODY || Board.board[i][j].state == BoardTile.State.HEAD)
+                {
+                    Board.distanceMap[i][j] = -1;
+                } else
+                {
+                    Board.distanceMap[i][j] = Board.width * Board.height;
+                }
+            }
+        }
+    }
+    
+    private void resetDistanceMap()
+    {
+
+        for (int i = 0; i < Board.width; i++)
+        {
+            for (int j = 0; j < Board.height; j++)
+            {
                 if (Board.board[i][j].state == BoardTile.State.BODY || Board.board[i][j].state == BoardTile.State.HEAD)
                 {
                     Board.distanceMap[i][j] = -1;
