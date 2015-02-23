@@ -31,7 +31,7 @@ public class BattleSnakeHandlers
         Map<String, Object> responseObject = new HashMap<String, Object>();
         String move = getMove();
         
-        printDistanceBoard();
+       // printDistanceBoard();
         
         responseObject.put("move", move);
         responseObject.put("taunt", "Get Shreked");
@@ -60,14 +60,20 @@ public class BattleSnakeHandlers
     private String getMove()
     {
         calculateShortestDistanceMap();
+        narrowValidMoves();
         return foodDirection();
+    }
+    
+    private void narrowValidMoves()
+    {
+        
     }
 
     private String foodDirection()
     {
         int[] t = findShortestFoodCoord();
         int sp[] = shortestPath(t[0], t[1], -1);
-        System.err.println("Shortest X: " + sp[0] + " Y: " + sp[1]);
+        //System.err.println("Shortest X: " + sp[0] + " Y: " + sp[1]);
         if(sp[0] == -1 && sp[1] == -1) // No Path Available To Food
         {
             return stall();
@@ -77,10 +83,17 @@ public class BattleSnakeHandlers
     
     private String stall()
     {
-        calculateLongestDistanceMap();
+        findLargestAccessibleArea();
         
         return curDir();
     }
+    
+    private void findLargestAccessibleArea()
+    {
+        
+    }
+    
+    
 
     private String coordToDir(int[] c)
     {
@@ -272,35 +285,6 @@ public class BattleSnakeHandlers
             }
         }
     }
-    
-    private void calculateLongestDistanceMap()
-    {
-        this.resetDistanceMap();
-        Board.distanceMap[ourCoords()[0]][ourCoords()[1]] = 0;
-        calcLongDist(ourCoords()[0], ourCoords()[1]);
-    }
-    
-    private void calcLongDist(int x, int y)
-    {
-        calcLongHelper(x, y, x - 1, y);
-        calcLongHelper(x, y, x + 1, y);
-        calcLongHelper(x, y, x, y - 1);
-        calcLongHelper(x, y, x, y + 1);
-    }
-
-    private void calcLongHelper(int x1, int y1, int x2, int y2)
-    {
-        int curDist = Board.distanceMap[x1][y1];
-
-        if (validX(x2) && validY(y2) && Board.distanceMap[x2][y2] != -1)
-        {
-            if(Board.distanceMap[x2][y2] == Board.width * Board.height)
-            {
-                Board.distanceMap[x2][y2] = curDist + 1;
-                calcLongDist(x2, y2);
-            }
-        }
-    }
 
     private int[] getNextCoords(String dir)
     {
@@ -405,6 +389,17 @@ public class BattleSnakeHandlers
         parseBoardTiles((ArrayList<ArrayList<Object>>) requestBody.get("board"));
         parseSnakes((ArrayList<Map<String, Object>>) requestBody.get("snakes"));
         Board.food = toDoubleIntArray((ArrayList<ArrayList<Integer>>) requestBody.get("food"));
+        
+        Board.validMoves = new ArrayList<String>();
+        Board.validMoves.add("left");
+        Board.validMoves.add("right");
+        Board.validMoves.add("up");
+        Board.validMoves.add("down");
+        if(Board.turn != 0)
+        {
+            Board.validMoves.remove(reverseDir());
+        }
+        
     }
 
     private void parseBoardTiles(ArrayList<ArrayList<Object>> tiles)
@@ -489,6 +484,7 @@ public class BattleSnakeHandlers
 
     private static class Board
     {
+        public static ArrayList<String> validMoves;
 
         public static int width;
         public static int height;
