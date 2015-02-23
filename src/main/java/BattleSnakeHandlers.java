@@ -96,6 +96,7 @@ public class BattleSnakeHandlers
         calculateShortestDistanceMap();
         
         double maxValid = getMaxValidMoves() * MAX_VALID_CUTOFF;
+        System.err.println("M: " + maxValid + " L: " + leftValid + " R: " + rightValid + " U: " + upValid + " D: " + downValid);
         
         if(leftValid < maxValid && rightValid < maxValid && upValid < maxValid && downValid < maxValid)
         {
@@ -110,7 +111,6 @@ public class BattleSnakeHandlers
             Board.invalidCoords.add(ourNextCoords("up"));
         if(downValid < maxValid)
             Board.invalidCoords.add(ourNextCoords("down"));
-        
         
     }
     
